@@ -47,7 +47,6 @@ button{cursor:pointer;border:none;background:none;color:inherit}
 
 .app{max-width:520px;margin:0 auto;min-height:100%;padding-bottom:92px;position:relative}
 
-/* ===== Header ===== */
 .header{
   padding:22px 20px 12px;
   position:sticky;top:0;z-index:20;
@@ -55,15 +54,15 @@ button{cursor:pointer;border:none;background:none;color:inherit}
   backdrop-filter:blur(4px);
 }
 .header h1{font-size:20px;font-weight:700;letter-spacing:-.3px;display:flex;align-items:center;gap:9px}
-.header h1 .dot{width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px var(--accent)}
+.header h1 .dot{width:9px;height:9px;border-radius:50%;background:var(--text-3);transition:.3s}
+.header h1 .dot.on{background:var(--green);box-shadow:0 0 12px var(--green)}
+.header h1 .dot.off{background:var(--red);box-shadow:0 0 12px var(--red)}
 .header p{color:var(--text-3);font-size:13px;margin-top:2px;font-weight:400}
 
-/* ===== Views ===== */
 .view{padding:4px 20px 0;animation:fade .35s ease}
 .view.hidden{display:none}
 @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 
-/* ===== Hero balance card ===== */
 .hero{
   background:var(--card);
   border:1px solid var(--line);
@@ -92,7 +91,6 @@ button{cursor:pointer;border:none;background:none;color:inherit}
 .hero .sub{margin-top:14px;color:var(--text-2);font-size:14px;font-weight:400}
 .hero .sub b{color:var(--text);font-weight:700}
 
-/* ===== Stat grid ===== */
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
 .stat{
   background:var(--card);border:1px solid var(--line);
@@ -105,26 +103,23 @@ button{cursor:pointer;border:none;background:none;color:inherit}
 .stat .k .ico{width:15px;height:15px;opacity:.8}
 .stat .v{font-size:26px;font-weight:800;letter-spacing:-.6px;font-variant-numeric:tabular-nums}
 .stat .u{font-size:13px;color:var(--text-3);font-weight:400}
-.stat.wide{grid-column:span 2}
 .v.green{color:var(--green)}.v.red{color:var(--red)}.v.accent{color:var(--accent-2)}.v.amber{color:var(--amber)}
 
-/* ===== Big action button ===== */
 .big-btn{
   width:100%;background:var(--accent);color:#fff;
   border-radius:var(--radius);padding:19px;
   font-size:17px;font-weight:700;letter-spacing:-.2px;
   display:flex;align-items:center;justify-content:center;gap:10px;
   box-shadow:0 6px 20px rgba(91,141,239,.35);
-  transition:transform .12s,box-shadow .2s;margin-bottom:16px;
+  transition:transform .12s,box-shadow .2s,opacity .2s;margin-bottom:16px;
 }
 .big-btn:active{transform:scale(.97);box-shadow:0 3px 12px rgba(91,141,239,.3)}
+.big-btn:disabled{opacity:.45;pointer-events:none}
 .big-btn .ico{width:22px;height:22px}
 .big-btn.secondary{background:var(--card);color:var(--text);border:1px solid var(--line-2);box-shadow:none}
 
-/* ===== Section title ===== */
 .sec-title{font-size:14px;font-weight:700;color:var(--text-2);margin:22px 2px 12px;display:flex;align-items:center;gap:8px}
 
-/* ===== Forms ===== */
 .field{margin-bottom:15px}
 .field label{display:block;font-size:13.5px;font-weight:500;color:var(--text-2);margin-bottom:7px}
 .field input,.field textarea,.field select{
@@ -135,10 +130,6 @@ button{cursor:pointer;border:none;background:none;color:inherit}
 .field input:focus,.field textarea:focus,.field select:focus{
   outline:none;border-color:var(--accent);background:var(--card);
 }
-.field textarea{resize:vertical;min-height:70px}
-.field .hint{font-size:12px;color:var(--text-3);margin-top:6px}
-
-/* amount stepper */
 .quick-amt{display:flex;gap:8px;flex-wrap:wrap;margin-top:9px}
 .quick-amt button{
   background:var(--card);border:1px solid var(--line);border-radius:9px;
@@ -146,9 +137,8 @@ button{cursor:pointer;border:none;background:none;color:inherit}
 }
 .quick-amt button:active{border-color:var(--accent);color:var(--accent-2)}
 
-/* ===== History ===== */
 .filter-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
-.filter-bar input,.filter-bar select{
+.filter-bar input{
   flex:1;min-width:120px;background:var(--card);border:1px solid var(--line);
   border-radius:10px;padding:10px 12px;font-size:14px;color:var(--text);
 }
@@ -173,7 +163,7 @@ button{cursor:pointer;border:none;background:none;color:inherit}
 .tx.payment .icon{background:var(--green-bg);color:var(--green)}
 .tx.workshop .icon{background:var(--accent-bg);color:var(--accent-2)}
 .tx .body{flex:1;min-width:0}
-.tx .body .t1{font-size:15px;font-weight:600;display:flex;align-items:center;gap:6px}
+.tx .body .t1{font-size:15px;font-weight:600}
 .tx .body .t2{font-size:12.5px;color:var(--text-3);margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .tx .amt{font-size:16px;font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap}
 .tx .amt.plus{color:var(--green)}.tx .amt.minus{color:var(--text-2)}
@@ -188,7 +178,6 @@ button{cursor:pointer;border:none;background:none;color:inherit}
 .empty svg{width:46px;height:46px;opacity:.4;margin-bottom:14px}
 .empty p{font-size:14px}
 
-/* ===== Reports ===== */
 .chart-card{
   background:var(--card);border:1px solid var(--line);
   border-radius:var(--radius);padding:18px 16px 14px;margin-bottom:16px;
@@ -196,7 +185,6 @@ button{cursor:pointer;border:none;background:none;color:inherit}
 .chart-card h3{font-size:14px;font-weight:700;color:var(--text-2);margin-bottom:14px;display:flex;align-items:center;gap:8px}
 .chart-wrap{position:relative;height:200px}
 
-/* ===== Settings ===== */
 .set-row{
   display:flex;align-items:center;justify-content:space-between;gap:14px;
   background:var(--card);border:1px solid var(--line);
@@ -216,7 +204,6 @@ button{cursor:pointer;border:none;background:none;color:inherit}
 }
 .danger-btn:active{background:rgba(240,97,109,.2)}
 
-/* ===== Bottom nav ===== */
 .nav{
   position:fixed;bottom:0;left:0;right:0;z-index:30;
   max-width:520px;margin:0 auto;
@@ -234,7 +221,6 @@ button{cursor:pointer;border:none;background:none;color:inherit}
 .nav button.active{color:var(--accent-2)}
 .nav button.active svg{transform:translateY(-1px)}
 
-/* ===== Modal / Sheet ===== */
 .sheet-bg{
   position:fixed;inset:0;z-index:40;background:rgba(0,0,0,.55);
   display:flex;align-items:flex-end;justify-content:center;
@@ -257,7 +243,6 @@ button{cursor:pointer;border:none;background:none;color:inherit}
 }
 .sheet .submit:active{transform:scale(.98)}
 
-/* ===== Toast ===== */
 .toast{
   position:fixed;bottom:108px;left:50%;transform:translateX(-50%) translateY(20px);
   background:var(--card-2);border:1px solid var(--line-2);color:var(--text);
@@ -269,6 +254,20 @@ button{cursor:pointer;border:none;background:none;color:inherit}
 .toast svg{width:17px;height:17px;color:var(--green)}
 .toast.err svg{color:var(--red)}
 
+.loader{
+  position:fixed;inset:0;z-index:60;background:var(--bg);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;
+  transition:opacity .4s;
+}
+.loader.gone{opacity:0;pointer-events:none}
+.loader .ring{
+  width:38px;height:38px;border-radius:50%;
+  border:3px solid var(--line);border-top-color:var(--accent);
+  animation:spin .8s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loader p{color:var(--text-3);font-size:14px}
+
 @media(max-width:360px){
   .hero .amount{font-size:38px}
   .stat .v{font-size:23px}
@@ -276,13 +275,18 @@ button{cursor:pointer;border:none;background:none;color:inherit}
 </style>
 </head>
 <body>
+
+<div class="loader" id="loader">
+  <div class="ring"></div>
+  <p>מתחבר לשרת…</p>
+</div>
+
 <div class="app">
   <div class="header">
-    <h1><span class="dot"></span> ניהול סדנאות</h1>
-    <p id="headerSub">מעקב תשלומים ויתרה</p>
+    <h1><span class="dot" id="syncDot"></span> ניהול סדנאות</h1>
+    <p id="headerSub">מתחבר…</p>
   </div>
 
-  <!-- ============ HOME ============ -->
   <div class="view" id="view-home">
     <div class="hero" id="hero">
       <div class="label">
@@ -313,17 +317,16 @@ button{cursor:pointer;border:none;background:none;color:inherit}
       </div>
     </div>
 
-    <button class="big-btn" onclick="openSheet('workshop')">
+    <button class="big-btn" id="btnWs" onclick="openSheet('workshop')">
       <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14"/></svg>
       נוספה סדנה
     </button>
-    <button class="big-btn secondary" onclick="openSheet('payment')">
+    <button class="big-btn secondary" id="btnPay" onclick="openSheet('payment')">
       <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20M6 15h4"/></svg>
       הוספת תשלום
     </button>
   </div>
 
-  <!-- ============ HISTORY ============ -->
   <div class="view hidden" id="view-history">
     <div class="chip-row" id="chipRow">
       <button class="chip active" data-f="all" onclick="setFilter('all',this)">הכל</button>
@@ -331,13 +334,12 @@ button{cursor:pointer;border:none;background:none;color:inherit}
       <button class="chip" data-f="workshop" onclick="setFilter('workshop',this)">סדנאות</button>
     </div>
     <div class="filter-bar">
-      <input type="date" id="fromDate" onchange="renderHistory()" title="מתאריך">
-      <input type="date" id="toDate" onchange="renderHistory()" title="עד תאריך">
+      <input type="date" id="fromDate" onchange="renderHistory()">
+      <input type="date" id="toDate" onchange="renderHistory()">
     </div>
     <div id="historyList"></div>
   </div>
 
-  <!-- ============ REPORTS ============ -->
   <div class="view hidden" id="view-reports">
     <div class="chart-card">
       <h3><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>תשלומים לפי חודש</h3>
@@ -353,7 +355,6 @@ button{cursor:pointer;border:none;background:none;color:inherit}
     </div>
   </div>
 
-  <!-- ============ SETTINGS ============ -->
   <div class="view hidden" id="view-settings">
     <div class="sec-title">הגדרות</div>
     <div class="set-row">
@@ -369,175 +370,140 @@ button{cursor:pointer;border:none;background:none;color:inherit}
     <div class="set-row">
       <div class="info">
         <div class="t">סה"כ תנועות</div>
-        <div class="d">תשלומים וסדנאות שנשמרו</div>
+        <div class="d">מסונכרן בין כל המכשירים</div>
       </div>
-      <div class="v accent" id="setCount" style="font-size:22px;font-weight:800"></div>
+      <div class="v accent" id="setCount" style="font-size:22px;font-weight:800">0</div>
     </div>
     <button class="big-btn secondary" onclick="exportData()" style="margin-top:6px">
       <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
       גיבוי נתונים (קובץ)
     </button>
     <button class="danger-btn" onclick="clearAll()">מחיקת כל הנתונים</button>
-    <p style="text-align:center;color:var(--text-3);font-size:12px;margin-top:20px">הנתונים נשמרים במכשיר הזה בלבד</p>
+    <p style="text-align:center;color:var(--text-3);font-size:12px;margin-top:20px">הנתונים מסונכרנים בענן בזמן אמת</p>
   </div>
 </div>
 
-<!-- ============ NAV ============ -->
 <nav class="nav" id="nav">
-  <button class="active" data-v="home" onclick="nav('home',this)">
+  <button class="active" onclick="nav('home',this)">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10.5 12 3l9 7.5M5 9v11h14V9"/></svg>בית
   </button>
-  <button data-v="history" onclick="nav('history',this)">
+  <button onclick="nav('history',this)">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 2"/><circle cx="12" cy="12" r="9"/></svg>היסטוריה
   </button>
-  <button data-v="reports" onclick="nav('reports',this)">
+  <button onclick="nav('reports',this)">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><rect x="7" y="10" width="3" height="7"/><rect x="13" y="6" width="3" height="11"/></svg>דוחות
   </button>
-  <button data-v="settings" onclick="nav('settings',this)">
+  <button onclick="nav('settings',this)">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>הגדרות
   </button>
 </nav>
 
-<!-- ============ SHEET (add form) ============ -->
 <div class="sheet-bg" id="sheetBg" onclick="if(event.target===this)closeSheet()">
   <div class="sheet" id="sheet"></div>
 </div>
 
 <div class="toast" id="toast"></div>
 
-<script>
-/* ===================== DATA LAYER (IndexedDB) ===================== */
-const DB_NAME='workshopsDB', DB_VER=1;
-let db=null;
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+import {
+  getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot,
+  getDocs, writeBatch
+} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 
-function openDB(){
-  return new Promise((res,rej)=>{
-    const r=indexedDB.open(DB_NAME,DB_VER);
-    r.onupgradeneeded=e=>{
-      const d=e.target.result;
-      if(!d.objectStoreNames.contains('tx'))
-        d.createObjectStore('tx',{keyPath:'id'});
-      if(!d.objectStoreNames.contains('settings'))
-        d.createObjectStore('settings',{keyPath:'key'});
-    };
-    r.onsuccess=e=>{db=e.target.result;res()};
-    r.onerror=e=>rej(e);
-  });
-}
-function tx(store,mode){return db.transaction(store,mode).objectStore(store)}
-function dbGetAll(store){
-  return new Promise((res,rej)=>{const r=tx(store,'readonly').getAll();r.onsuccess=()=>res(r.result);r.onerror=rej})
-}
-function dbPut(store,val){
-  return new Promise((res,rej)=>{const r=tx(store,'readwrite').put(val);r.onsuccess=res;r.onerror=rej})
-}
-function dbDel(store,key){
-  return new Promise((res,rej)=>{const r=tx(store,'readwrite').delete(key);r.onsuccess=res;r.onerror=rej})
-}
-function dbClear(store){
-  return new Promise((res,rej)=>{const r=tx(store,'readwrite').clear();r.onsuccess=res;r.onerror=rej})
-}
-function dbGet(store,key){
-  return new Promise((res,rej)=>{const r=tx(store,'readonly').get(key);r.onsuccess=()=>res(r.result);r.onerror=rej})
-}
+/* ===================== FIREBASE CONFIG ===================== */
+const firebaseConfig = {
+  apiKey: "AIzaSyCHGpdHL-xLTUaw4Aa78GvKaT3uFo2vfKY",
+  authDomain: "work-site-f58b5.firebaseapp.com",
+  projectId: "work-site-f58b5",
+  storageBucket: "work-site-f58b5.firebasestorage.app",
+  messagingSenderId: "835234633955",
+  appId: "1:835234633955:web:e7291d8c43ab36d3450dd6"
+};
+
+const app = initializeApp(firebaseConfig);
+const db  = getFirestore(app);
+
+const txCol       = collection(db, "transactions");
+const settingsDoc = doc(db, "settings", "config");
 
 /* ===================== STATE ===================== */
-let STATE={transactions:[],price:100};
+const STATE = { transactions: [], price: 100, ready: false };
 
-async function loadState(){
-  STATE.transactions=await dbGetAll('tx')||[];
-  const p=await dbGet('settings','price');
-  STATE.price=p?p.value:100;
-  if(!p) await dbPut('settings',{key:'price',value:100});
-}
-
-/* ===================== CORE CALCULATION (single source of truth) ===================== */
+/* ===================== CORE CALCULATION ===================== */
 function compute(){
-  const price=STATE.price;
-  const txs=STATE.transactions;
-  const totalPaid=txs.filter(t=>t.type==='payment').reduce((s,t)=>s+t.amount,0);
-  const workshopsCount=txs.filter(t=>t.type==='workshop').length;
-  const workshopsCost=workshopsCount*price;
-  const balance=totalPaid-workshopsCost; // >0 credit(prepaid), <0 debt
-  const prepaidWorkshops=balance>0?Math.floor(balance/price):0;
-  const prepaidRemainder=balance>0?balance%price:0;
-  // unpaid = workshops not yet covered by payments (only if in debt)
-  const unpaidWorkshops=balance<0?Math.ceil(Math.abs(balance)/price):0;
-  return {price,totalPaid,workshopsCount,workshopsCost,balance,prepaidWorkshops,prepaidRemainder,unpaidWorkshops};
+  const price = STATE.price;
+  const txs   = STATE.transactions;
+  const totalPaid       = txs.filter(t=>t.type==='payment').reduce((s,t)=>s+t.amount,0);
+  const workshopsCount  = txs.filter(t=>t.type==='workshop').length;
+  const balance         = totalPaid - workshopsCount*price;
+  const prepaidWorkshops= balance>0 ? Math.floor(balance/price) : 0;
+  const prepaidRemainder= balance>0 ? balance%price : 0;
+  const unpaidWorkshops = balance<0 ? Math.ceil(Math.abs(balance)/price) : 0;
+  return {price,totalPaid,workshopsCount,balance,prepaidWorkshops,prepaidRemainder,unpaidWorkshops};
 }
 
 /* ===================== FORMAT ===================== */
-const nf=new Intl.NumberFormat('he-IL');
-function money(n){return nf.format(Math.round(n))}
-function fmtDate(iso){
-  const d=new Date(iso);
-  return d.toLocaleDateString('he-IL',{day:'numeric',month:'short',year:'numeric'});
-}
-function monthKey(iso){const d=new Date(iso);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')}
-function monthLabel(key){
-  const[y,m]=key.split('-');
-  return new Date(y,m-1).toLocaleDateString('he-IL',{month:'short',year:'2-digit'});
-}
+const nf = new Intl.NumberFormat('he-IL');
+const money = n => nf.format(Math.round(n));
+const fmtDate = iso => new Date(iso).toLocaleDateString('he-IL',{day:'numeric',month:'short',year:'numeric'});
+const monthKey = iso => { const d=new Date(iso); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'); };
+const monthLabel = k => { const[y,m]=k.split('-'); return new Date(y,m-1).toLocaleDateString('he-IL',{month:'short',year:'2-digit'}); };
+const todayISO = () => new Date().toISOString().slice(0,10);
+const escapeHtml = s => s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
-/* ===================== RENDER HOME ===================== */
+/* ===================== RENDER: HOME ===================== */
 function renderHome(){
-  const c=compute();
-  const hero=document.getElementById('hero');
-  const amountEl=document.getElementById('heroAmount');
-  const labelEl=document.getElementById('heroLabel');
-  const statusEl=document.getElementById('heroStatus');
-  const subEl=document.getElementById('heroSub');
-
-  amountEl.textContent=money(Math.abs(c.balance));
+  const c = compute();
+  const hero = document.getElementById('hero');
+  document.getElementById('heroAmount').textContent = money(Math.abs(c.balance));
+  const labelEl  = document.getElementById('heroLabel');
+  const statusEl = document.getElementById('heroStatus');
+  const subEl    = document.getElementById('heroSub');
 
   if(c.balance>0){
     hero.style.setProperty('--glow','var(--green-bg)');
     labelEl.textContent='אבא שילם מראש';
-    statusEl.className='';statusEl.innerHTML=
-      '<div class="status st-credit"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m5 12 5 5L20 7"/></svg>יש לך יתרת זכות</div>';
+    statusEl.innerHTML='<div class="status st-credit"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m5 12 5 5L20 7"/></svg>יש לך יתרת זכות</div>';
     let s=`נותרו <b>${c.prepaidWorkshops}</b> סדנאות ששולמו מראש`;
-    if(c.prepaidRemainder>0)s+=` <b>+ ${money(c.prepaidRemainder)} ₪</b>`;
+    if(c.prepaidRemainder>0) s+=` <b>+ ${money(c.prepaidRemainder)} ₪</b>`;
     subEl.innerHTML=s;
   }else if(c.balance<0){
     hero.style.setProperty('--glow','var(--red-bg)');
     labelEl.textContent='אבא חייב לך';
-    statusEl.className='';statusEl.innerHTML=
-      '<div class="status st-debt"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 8v5M12 16h.01"/><circle cx="12" cy="12" r="9"/></svg>קיים חוב אליך</div>';
+    statusEl.innerHTML='<div class="status st-debt"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 8v5M12 16h.01"/><circle cx="12" cy="12" r="9"/></svg>קיים חוב אליך</div>';
     subEl.innerHTML=`שווה ערך ל־<b>${c.unpaidWorkshops}</b> סדנאות שטרם שולמו`;
   }else{
     hero.style.setProperty('--glow','var(--accent-bg)');
     labelEl.textContent='יתרה נוכחית';
-    statusEl.className='';statusEl.innerHTML=
-      '<div class="status st-even"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14"/></svg>החשבון מאוזן</div>';
+    statusEl.innerHTML='<div class="status st-even"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14"/></svg>החשבון מאוזן</div>';
     subEl.innerHTML='אין חוב לאף צד';
   }
 
-  document.getElementById('stWorkshops').textContent=c.workshopsCount;
-  document.getElementById('stPaid').innerHTML=money(c.totalPaid)+'<span class="u"> ₪</span>';
-  document.getElementById('stPrepaid').innerHTML=c.prepaidWorkshops+'<span class="u"> סדנאות</span>';
-  document.getElementById('stUnpaid').innerHTML=c.unpaidWorkshops+'<span class="u"> סדנאות</span>';
-
-  document.getElementById('headerSub').textContent=`מחיר סדנה: ${money(c.price)} ₪`;
+  document.getElementById('stWorkshops').textContent = c.workshopsCount;
+  document.getElementById('stPaid').innerHTML    = money(c.totalPaid)+'<span class="u"> ₪</span>';
+  document.getElementById('stPrepaid').innerHTML = c.prepaidWorkshops+'<span class="u"> סדנאות</span>';
+  document.getElementById('stUnpaid').innerHTML  = c.unpaidWorkshops+'<span class="u"> סדנאות</span>';
+  document.getElementById('headerSub').textContent = `מחיר סדנה: ${money(c.price)} ₪`;
 }
 
-/* ===================== RENDER HISTORY ===================== */
+/* ===================== RENDER: HISTORY ===================== */
 let currentFilter='all';
-function setFilter(f,btn){
+window.setFilter = (f,btn)=>{
   currentFilter=f;
   document.querySelectorAll('#chipRow .chip').forEach(c=>c.classList.remove('active'));
   btn.classList.add('active');
   renderHistory();
-}
+};
 function renderHistory(){
   const list=document.getElementById('historyList');
   const from=document.getElementById('fromDate').value;
-  const to=document.getElementById('toDate').value;
+  const to  =document.getElementById('toDate').value;
   let items=[...STATE.transactions];
-
-  if(currentFilter!=='all')items=items.filter(t=>t.type===currentFilter);
-  if(from)items=items.filter(t=>t.date>=from);
-  if(to)items=items.filter(t=>t.date<=to);
-  items.sort((a,b)=>b.date.localeCompare(a.date)||b.id-a.id);
+  if(currentFilter!=='all') items=items.filter(t=>t.type===currentFilter);
+  if(from) items=items.filter(t=>t.date>=from);
+  if(to)   items=items.filter(t=>t.date<=to);
+  items.sort((a,b)=>b.date.localeCompare(a.date)||String(b.id).localeCompare(String(a.id)));
 
   if(!items.length){
     list.innerHTML=`<div class="empty">
@@ -546,53 +512,44 @@ function renderHistory(){
     return;
   }
   const price=STATE.price;
+  const trash='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>';
   list.innerHTML=items.map(t=>{
+    const meta=`${fmtDate(t.date)}${t.note?' · '+escapeHtml(t.note):''}`;
     if(t.type==='payment'){
       return `<div class="tx payment">
         <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div>
-        <div class="body">
-          <div class="t1">תשלום התקבל</div>
-          <div class="t2">${fmtDate(t.date)}${t.note?' · '+escapeHtml(t.note):''}</div>
-        </div>
+        <div class="body"><div class="t1">תשלום התקבל</div><div class="t2">${meta}</div></div>
         <div class="amt plus">+${money(t.amount)} ₪</div>
-        <button class="del" onclick="delTx(${t.id})" aria-label="מחק"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></button>
-      </div>`;
-    }else{
-      return `<div class="tx workshop">
-        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg></div>
-        <div class="body">
-          <div class="t1">סדנה בוצעה</div>
-          <div class="t2">${fmtDate(t.date)}${t.note?' · '+escapeHtml(t.note):''}</div>
-        </div>
-        <div class="amt minus">−${money(price)} ₪</div>
-        <button class="del" onclick="delTx(${t.id})" aria-label="מחק"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></button>
+        <button class="del" onclick="delTx('${t.id}')" aria-label="מחק">${trash}</button>
       </div>`;
     }
+    return `<div class="tx workshop">
+      <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg></div>
+      <div class="body"><div class="t1">סדנה בוצעה</div><div class="t2">${meta}</div></div>
+      <div class="amt minus">−${money(price)} ₪</div>
+      <button class="del" onclick="delTx('${t.id}')" aria-label="מחק">${trash}</button>
+    </div>`;
   }).join('');
 }
-function escapeHtml(s){return s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
 
-/* ===================== REPORTS ===================== */
-let charts={};
+/* ===================== RENDER: REPORTS ===================== */
+const charts={};
 function renderReports(){
-  const price=STATE.price;
-  const months={};
+  const price=STATE.price, months={};
   STATE.transactions.forEach(t=>{
     const k=monthKey(t.date);
-    if(!months[k])months[k]={pay:0,ws:0};
-    if(t.type==='payment')months[k].pay+=t.amount;
-    else months[k].ws+=1;
+    if(!months[k]) months[k]={pay:0,ws:0};
+    if(t.type==='payment') months[k].pay+=t.amount; else months[k].ws+=1;
   });
   const keys=Object.keys(months).sort();
   const labels=keys.map(monthLabel);
   const payData=keys.map(k=>months[k].pay);
-  const wsData=keys.map(k=>months[k].ws);
-  // cumulative balance per month end
+  const wsData =keys.map(k=>months[k].ws);
   let running=0;
-  const balData=keys.map(k=>{running+=months[k].pay-months[k].ws*price;return running});
+  const balData=keys.map(k=>{running+=months[k].pay-months[k].ws*price;return running;});
 
   const gridC='#2a3546', tickC='#9aa8bd';
-  const baseOpts=(fmt)=>({
+  const opts=fmt=>({
     responsive:true,maintainAspectRatio:false,
     plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>fmt(c.parsed.y)}}},
     scales:{
@@ -600,148 +557,131 @@ function renderReports(){
       y:{grid:{color:gridC},ticks:{color:tickC,font:{size:11,family:'Heebo'},callback:fmt},beginAtZero:true}
     }
   });
-  drawChart('chartPay','bar',labels,payData,'#5b8def',baseOpts(v=>money(v)+' ₪'));
-  drawChart('chartWs','bar',labels,wsData,'#3fb950',baseOpts(v=>v));
-  const balOpts=baseOpts(v=>money(v)+' ₪');balOpts.scales.y.beginAtZero=false;
-  drawChart('chartBal','line',labels,balData,'#e3a008',balOpts);
+  draw('chartPay','bar',labels,payData,'#5b8def',opts(v=>money(v)+' ₪'));
+  draw('chartWs','bar',labels,wsData,'#3fb950',opts(v=>v));
+  const bo=opts(v=>money(v)+' ₪'); bo.scales.y.beginAtZero=false;
+  draw('chartBal','line',labels,balData,'#e3a008',bo);
 }
-function drawChart(id,type,labels,data,color,opts){
+function draw(id,type,labels,data,color,options){
   const ctx=document.getElementById(id);
-  if(charts[id])charts[id].destroy();
-  if(!labels.length){
-    if(charts[id]){charts[id].destroy();delete charts[id]}
-    ctx.getContext('2d').clearRect(0,0,ctx.width,ctx.height);
-    return;
-  }
-  const ds={label:'',data,borderColor:color,backgroundColor:type==='line'?'rgba(227,160,8,.1)':color,
+  if(charts[id]){charts[id].destroy();delete charts[id];}
+  if(!labels.length){ctx.getContext('2d').clearRect(0,0,ctx.width,ctx.height);return;}
+  charts[id]=new Chart(ctx,{type,data:{labels,datasets:[{
+    data,borderColor:color,
+    backgroundColor:type==='line'?'rgba(227,160,8,.1)':color,
     borderRadius:type==='bar'?7:0,borderWidth:type==='line'?2.5:0,
-    tension:.35,fill:type==='line',pointBackgroundColor:color,pointRadius:4,pointHoverRadius:6,
-    maxBarThickness:38};
-  charts[id]=new Chart(ctx,{type,data:{labels,datasets:[ds]},options:opts});
+    tension:.35,fill:type==='line',pointBackgroundColor:color,
+    pointRadius:4,pointHoverRadius:6,maxBarThickness:38
+  }]},options});
 }
 
-/* ===================== SHEET (add form) ===================== */
-function todayISO(){const d=new Date();return d.toISOString().slice(0,10)}
-function openSheet(kind){
+/* ===================== SHEET ===================== */
+window.openSheet = kind=>{
   const sheet=document.getElementById('sheet');
   if(kind==='workshop'){
     sheet.innerHTML=`
       <div class="handle"></div>
       <h2>נוספה סדנה</h2>
-      <div class="field">
-        <label>תאריך</label>
-        <input type="date" id="wsDate" value="${todayISO()}">
-      </div>
-      <div class="field">
-        <label>הערה (רשות)</label>
-        <input type="text" id="wsNote" placeholder="למשל: סדנת בית ספר">
-      </div>
-      <button class="submit" onclick="addWorkshop()">אישור סדנה</button>`;
+      <div class="field"><label>תאריך</label><input type="date" id="wsDate" value="${todayISO()}"></div>
+      <div class="field"><label>הערה (רשות)</label><input type="text" id="wsNote" placeholder="למשל: סדנת בית ספר"></div>
+      <button class="submit" id="wsSubmit">אישור סדנה</button>`;
+    document.getElementById('wsSubmit').onclick=addWorkshop;
   }else{
     sheet.innerHTML=`
       <div class="handle"></div>
       <h2>הוספת תשלום</h2>
-      <div class="field">
-        <label>סכום (₪)</label>
-        <input type="number" id="payAmt" inputmode="numeric" placeholder="600" autofocus>
+      <div class="field"><label>סכום (₪)</label>
+        <input type="number" id="payAmt" inputmode="numeric" placeholder="600">
         <div class="quick-amt">
-          <button onclick="setAmt(100)">100</button>
-          <button onclick="setAmt(300)">300</button>
-          <button onclick="setAmt(600)">600</button>
-          <button onclick="setAmt(1000)">1,000</button>
+          <button data-a="100">100</button><button data-a="300">300</button>
+          <button data-a="600">600</button><button data-a="1000">1,000</button>
         </div>
       </div>
-      <div class="field">
-        <label>תאריך</label>
-        <input type="date" id="payDate" value="${todayISO()}">
-      </div>
-      <div class="field">
-        <label>הערה (רשות)</label>
-        <input type="text" id="payNote" placeholder="למשל: מזומן">
-      </div>
-      <button class="submit" onclick="addPayment()">שמירת תשלום</button>`;
+      <div class="field"><label>תאריך</label><input type="date" id="payDate" value="${todayISO()}"></div>
+      <div class="field"><label>הערה (רשות)</label><input type="text" id="payNote" placeholder="למשל: מזומן"></div>
+      <button class="submit" id="paySubmit">שמירת תשלום</button>`;
+    sheet.querySelectorAll('.quick-amt button').forEach(b=>{
+      b.onclick=()=>document.getElementById('payAmt').value=b.dataset.a;
+    });
+    document.getElementById('paySubmit').onclick=addPayment;
   }
   document.getElementById('sheetBg').classList.add('open');
-}
-function setAmt(v){document.getElementById('payAmt').value=v}
-function closeSheet(){document.getElementById('sheetBg').classList.remove('open')}
+};
+window.closeSheet = ()=>document.getElementById('sheetBg').classList.remove('open');
+
+/* ===================== WRITES ===================== */
+function newId(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7);}
 
 async function addWorkshop(){
-  const date=document.getElementById('wsDate').value||todayISO();
-  const note=document.getElementById('wsNote').value.trim();
-  const item={id:Date.now(),type:'workshop',amount:0,date,note};
-  STATE.transactions.push(item);
-  await dbPut('tx',item);
+  const item={id:newId(),type:'workshop',amount:0,
+    date:document.getElementById('wsDate').value||todayISO(),
+    note:document.getElementById('wsNote').value.trim()};
   closeSheet();
-  refreshAll();
-  toast('סדנה נוספה');
+  try{ await setDoc(doc(txCol,item.id),item); toast('סדנה נוספה'); }
+  catch(e){ console.error(e); toast('השמירה נכשלה',true); }
 }
 async function addPayment(){
   const amt=parseFloat(document.getElementById('payAmt').value);
-  if(!amt||amt<=0){toast('יש להזין סכום תקין',true);return}
-  const date=document.getElementById('payDate').value||todayISO();
-  const note=document.getElementById('payNote').value.trim();
-  const item={id:Date.now(),type:'payment',amount:amt,date,note};
-  STATE.transactions.push(item);
-  await dbPut('tx',item);
+  if(!amt||amt<=0){ toast('יש להזין סכום תקין',true); return; }
+  const item={id:newId(),type:'payment',amount:amt,
+    date:document.getElementById('payDate').value||todayISO(),
+    note:document.getElementById('payNote').value.trim()};
   closeSheet();
-  refreshAll();
-  toast('תשלום נשמר');
+  try{ await setDoc(doc(txCol,item.id),item); toast('תשלום נשמר'); }
+  catch(e){ console.error(e); toast('השמירה נכשלה',true); }
 }
-async function delTx(id){
-  STATE.transactions=STATE.transactions.filter(t=>t.id!==id);
-  await dbDel('tx',id);
-  refreshAll();
-  toast('נמחק');
-}
-
-/* ===================== SETTINGS ===================== */
-async function updatePrice(v){
+window.delTx = async id=>{
+  try{ await deleteDoc(doc(txCol,id)); toast('נמחק'); }
+  catch(e){ console.error(e); toast('המחיקה נכשלה',true); }
+};
+window.updatePrice = async v=>{
   const p=parseFloat(v);
-  if(!p||p<=0){document.getElementById('priceInput').value=STATE.price;toast('מחיר לא תקין',true);return}
-  STATE.price=p;
-  await dbPut('settings',{key:'price',value:p});
-  refreshAll();
-  toast('המחיר עודכן');
-}
-function renderSettings(){
-  document.getElementById('priceInput').value=STATE.price;
-  document.getElementById('setCount').textContent=STATE.transactions.length;
-}
-async function clearAll(){
-  if(!confirm('למחוק את כל התשלומים והסדנאות? פעולה זו אינה הפיכה.'))return;
-  await dbClear('tx');
-  STATE.transactions=[];
-  refreshAll();
-  toast('כל הנתונים נמחקו');
-}
-function exportData(){
+  if(!p||p<=0){ document.getElementById('priceInput').value=STATE.price; toast('מחיר לא תקין',true); return; }
+  try{ await setDoc(settingsDoc,{price:p}); toast('המחיר עודכן'); }
+  catch(e){ console.error(e); toast('העדכון נכשל',true); }
+};
+window.clearAll = async ()=>{
+  if(!confirm('למחוק את כל התשלומים והסדנאות? הפעולה תשפיע על כל המכשירים ואינה הפיכה.'))return;
+  try{
+    const snap=await getDocs(txCol);
+    const batch=writeBatch(db);
+    snap.forEach(d=>batch.delete(d.ref));
+    await batch.commit();
+    toast('כל הנתונים נמחקו');
+  }catch(e){ console.error(e); toast('המחיקה נכשלה',true); }
+};
+window.exportData = ()=>{
   const data={exported:new Date().toISOString(),price:STATE.price,transactions:STATE.transactions};
-  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
-  const url=URL.createObjectURL(blob);
+  const url=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));
   const a=document.createElement('a');
-  a.href=url;a.download='workshops-backup-'+todayISO()+'.json';a.click();
+  a.href=url; a.download='workshops-backup-'+todayISO()+'.json'; a.click();
   URL.revokeObjectURL(url);
   toast('קובץ הגיבוי ירד');
-}
+};
 
-/* ===================== NAV / REFRESH ===================== */
-function nav(v,btn){
+/* ===================== NAV ===================== */
+window.nav = (v,btn)=>{
   document.querySelectorAll('.view').forEach(el=>el.classList.add('hidden'));
   document.getElementById('view-'+v).classList.remove('hidden');
   document.querySelectorAll('#nav button').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
-  if(v==='reports')renderReports();
-  if(v==='history')renderHistory();
-  if(v==='settings')renderSettings();
+  if(v==='reports')  renderReports();
+  if(v==='history')  renderHistory();
+  if(v==='settings') renderSettings();
   window.scrollTo({top:0,behavior:'smooth'});
+};
+function renderSettings(){
+  document.getElementById('priceInput').value=STATE.price;
+  document.getElementById('setCount').textContent=STATE.transactions.length;
 }
 function refreshAll(){
   renderHome();
-  if(!document.getElementById('view-history').classList.contains('hidden'))renderHistory();
-  if(!document.getElementById('view-reports').classList.contains('hidden'))renderReports();
-  if(!document.getElementById('view-settings').classList.contains('hidden'))renderSettings();
+  const vis=id=>!document.getElementById(id).classList.contains('hidden');
+  if(vis('view-history'))  renderHistory();
+  if(vis('view-reports'))  renderReports();
+  if(vis('view-settings')) renderSettings();
 }
+window.renderHistory = renderHistory;
 
 /* ===================== TOAST ===================== */
 let toastT;
@@ -756,17 +696,32 @@ function toast(msg,err){
   toastT=setTimeout(()=>t.classList.remove('show'),2000);
 }
 
-/* ===================== INIT ===================== */
-(async function init(){
-  try{
-    await openDB();
-    await loadState();
-    renderHome();
-  }catch(e){
-    console.error(e);
-    toast('שגיאה בטעינת הנתונים',true);
-  }
-})();
+function setSync(on){
+  const dot=document.getElementById('syncDot');
+  dot.className='dot '+(on?'on':'off');
+}
+function hideLoader(){
+  if(STATE.ready)return;
+  STATE.ready=true;
+  document.getElementById('loader').classList.add('gone');
+}
+
+/* ===================== REALTIME LISTENERS ===================== */
+onSnapshot(txCol, snap=>{
+  STATE.transactions = snap.docs.map(d=>d.data());
+  setSync(true); hideLoader(); refreshAll();
+}, err=>{
+  console.error(err); setSync(false); hideLoader();
+  toast('אין חיבור לשרת',true);
+});
+
+onSnapshot(settingsDoc, snap=>{
+  STATE.price = snap.exists() ? (snap.data().price||100) : 100;
+  if(!snap.exists()) setDoc(settingsDoc,{price:100}).catch(()=>{});
+  refreshAll();
+}, err=>console.error(err));
+
+setTimeout(hideLoader,6000);
 </script>
 </body>
 </html>
