@@ -2,417 +2,536 @@
 <html lang="he" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ניהול סדנאות</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
 :root{
-  --bg:#0d1117;
-  --bg-2:#151b23;
-  --card:#1a2230;
-  --card-2:#212b3b;
-  --line:#2a3546;
-  --line-2:#374357;
-  --text:#e6edf3;
-  --text-2:#9aa8bd;
-  --text-3:#5f6d82;
-  --accent:#5b8def;
-  --accent-2:#7aa5f5;
-  --accent-bg:rgba(91,141,239,.12);
-  --green:#3fb950;
-  --green-bg:rgba(63,185,80,.12);
-  --red:#f0616d;
-  --red-bg:rgba(240,97,109,.12);
-  --amber:#e3a008;
-  --amber-bg:rgba(227,160,8,.12);
-  --radius:16px;
-  --radius-sm:11px;
+  --bg:#0d1117; --bg-2:#151b23; --card:#1a2230; --card-2:#212b3b;
+  --line:#2a3546; --line-2:#374357;
+  --text:#e6edf3; --text-2:#9aa8bd; --text-3:#5f6d82;
+  --accent:#5b8def; --accent-2:#7aa5f5; --accent-bg:rgba(91,141,239,.12);
+  --green:#3fb950; --green-bg:rgba(63,185,80,.12);
+  --red:#f0616d; --red-bg:rgba(240,97,109,.12);
+  --amber:#e3a008; --amber-bg:rgba(227,160,8,.12);
+  --purple:#a371f7; --purple-bg:rgba(163,113,247,.12);
+  --r:16px; --r-sm:11px;
   --shadow:0 8px 30px rgba(0,0,0,.4);
+  --sidebar:250px;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%}
-body{
-  font-family:'Heebo',system-ui,sans-serif;
-  background:var(--bg);
-  color:var(--text);
-  -webkit-font-smoothing:antialiased;
-  line-height:1.5;
-  overflow-x:hidden;
-}
+body{font-family:'Heebo',system-ui,sans-serif;background:var(--bg);color:var(--text);
+  -webkit-font-smoothing:antialiased;line-height:1.5;overflow-x:hidden}
 button,input,select,textarea{font-family:inherit;font-size:16px}
 button{cursor:pointer;border:none;background:none;color:inherit}
+::-webkit-scrollbar{width:9px;height:9px}
+::-webkit-scrollbar-thumb{background:var(--line-2);border-radius:9px}
+::-webkit-scrollbar-track{background:transparent}
 
-.app{max-width:520px;margin:0 auto;min-height:100%;padding-bottom:92px;position:relative}
+/* ========== SHELL ========== */
+.shell{display:flex;min-height:100vh}
 
-.header{
-  padding:22px 20px 12px;
-  position:sticky;top:0;z-index:20;
-  background:linear-gradient(to bottom,var(--bg) 70%,transparent);
-  backdrop-filter:blur(4px);
+/* ---- Sidebar (desktop) ---- */
+.sidebar{
+  display:none;width:var(--sidebar);flex-shrink:0;
+  background:var(--bg-2);border-inline-end:1px solid var(--line);
+  padding:22px 14px;position:sticky;top:0;height:100vh;flex-direction:column;
 }
-.header h1{font-size:20px;font-weight:700;letter-spacing:-.3px;display:flex;align-items:center;gap:9px}
-.header h1 .dot{width:9px;height:9px;border-radius:50%;background:var(--text-3);transition:.3s}
-.header h1 .dot.on{background:var(--green);box-shadow:0 0 12px var(--green)}
-.header h1 .dot.off{background:var(--red);box-shadow:0 0 12px var(--red)}
-.header p{color:var(--text-3);font-size:13px;margin-top:2px;font-weight:400}
+.sidebar .brand{display:flex;align-items:center;gap:10px;padding:0 10px 22px;font-size:18px;font-weight:700}
+.sidebar .brand .dot{width:9px;height:9px;border-radius:50%;background:var(--text-3);transition:.3s;flex:0 0 9px}
+.sidebar .brand .dot.on{background:var(--green);box-shadow:0 0 12px var(--green)}
+.sidebar .brand .dot.off{background:var(--red);box-shadow:0 0 12px var(--red)}
+.sidebar nav{display:flex;flex-direction:column;gap:3px}
+.sidebar nav button{
+  display:flex;align-items:center;gap:12px;padding:12px 13px;border-radius:10px;
+  color:var(--text-2);font-size:14.5px;font-weight:500;text-align:start;transition:.15s;
+}
+.sidebar nav button svg{width:20px;height:20px;flex:0 0 20px}
+.sidebar nav button:hover{background:var(--card);color:var(--text)}
+.sidebar nav button.active{background:var(--accent-bg);color:var(--accent-2);font-weight:600}
+.sidebar .foot{margin-top:auto;padding:12px 10px 0;border-top:1px solid var(--line);
+  color:var(--text-3);font-size:12px}
 
-.view{padding:4px 20px 0;animation:fade .35s ease}
+/* ---- Main ---- */
+.main{flex:1;min-width:0;max-width:100%}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px 92px}
+
+.topbar{
+  padding:20px 20px 10px;position:sticky;top:0;z-index:20;
+  background:linear-gradient(to bottom,var(--bg) 72%,transparent);backdrop-filter:blur(5px);
+}
+.topbar .inner{max-width:1080px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.topbar h1{font-size:20px;font-weight:700;display:flex;align-items:center;gap:9px}
+.topbar h1 .dot{width:9px;height:9px;border-radius:50%;background:var(--text-3);transition:.3s;flex:0 0 9px}
+.topbar h1 .dot.on{background:var(--green);box-shadow:0 0 12px var(--green)}
+.topbar h1 .dot.off{background:var(--red);box-shadow:0 0 12px var(--red)}
+.topbar .sub{color:var(--text-3);font-size:13px}
+
+.view{animation:fade .3s ease}
 .view.hidden{display:none}
-@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes fade{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
 
+/* ========== HERO ========== */
 .hero{
-  background:var(--card);
-  border:1px solid var(--line);
-  border-radius:var(--radius);
-  padding:26px 22px;
-  margin-bottom:16px;
-  position:relative;overflow:hidden;
-  box-shadow:var(--shadow);
+  background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  padding:26px 22px;margin-bottom:16px;position:relative;overflow:hidden;box-shadow:var(--shadow);
 }
-.hero::before{
-  content:"";position:absolute;inset:0;
-  background:radial-gradient(120% 90% at 90% -10%,var(--glow,var(--accent-bg)),transparent 60%);
-  pointer-events:none;transition:background .5s;
-}
+.hero::before{content:"";position:absolute;inset:0;pointer-events:none;transition:background .5s;
+  background:radial-gradient(120% 90% at 90% -10%,var(--glow,var(--accent-bg)),transparent 60%)}
 .hero .label{font-size:13px;color:var(--text-2);font-weight:500;display:flex;align-items:center;gap:7px}
-.hero .label .ico{width:16px;height:16px;flex:0 0 16px}
+.hero .label svg{width:16px;height:16px;flex:0 0 16px}
 .hero .amount{font-size:44px;font-weight:900;letter-spacing:-1.5px;margin-top:6px;line-height:1;font-variant-numeric:tabular-nums}
 .hero .amount .cur{font-size:24px;font-weight:500;color:var(--text-2);margin-inline-start:4px}
-.hero .status{
-  margin-top:16px;display:inline-flex;align-items:center;gap:7px;
-  padding:7px 13px;border-radius:99px;font-size:13.5px;font-weight:500;
-}
-.hero .status .ico{width:16px;height:16px}
+.hero .status{margin-top:15px;display:inline-flex;align-items:center;gap:7px;padding:7px 13px;
+  border-radius:99px;font-size:13.5px;font-weight:500}
+.hero .status svg{width:16px;height:16px;flex:0 0 16px}
 .st-credit{background:var(--green-bg);color:var(--green)}
 .st-debt{background:var(--red-bg);color:var(--red)}
 .st-even{background:var(--accent-bg);color:var(--accent-2)}
-.hero .sub{margin-top:14px;color:var(--text-2);font-size:14px;font-weight:400}
+.hero .sub{margin-top:13px;color:var(--text-2);font-size:14px}
 .hero .sub b{color:var(--text);font-weight:700}
 
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
-.stat{
-  background:var(--card);border:1px solid var(--line);
-  border-radius:var(--radius-sm);padding:16px 15px;
-  display:flex;flex-direction:column;gap:2px;
-  transition:border-color .2s,transform .2s;
-}
-.stat:active{transform:scale(.98)}
+/* ========== GRID / STATS ========== */
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:16px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:var(--r-sm);
+  padding:16px 15px;display:flex;flex-direction:column;gap:2px;transition:.2s}
 .stat .k{font-size:12.5px;color:var(--text-3);font-weight:500;display:flex;align-items:center;gap:6px}
-.stat .k .ico{width:15px;height:15px;opacity:.8}
+.stat .k svg{width:15px;height:15px;flex:0 0 15px;opacity:.85}
 .stat .v{font-size:26px;font-weight:800;letter-spacing:-.6px;font-variant-numeric:tabular-nums}
 .stat .u{font-size:13px;color:var(--text-3);font-weight:400}
-.v.green{color:var(--green)}.v.red{color:var(--red)}.v.accent{color:var(--accent-2)}.v.amber{color:var(--amber)}
+.v.green{color:var(--green)}.v.red{color:var(--red)}.v.accent{color:var(--accent-2)}
+.v.amber{color:var(--amber)}.v.purple{color:var(--purple)}
 
-.big-btn{
-  width:100%;background:var(--accent);color:#fff;
-  border-radius:var(--radius);padding:19px;
-  font-size:17px;font-weight:700;letter-spacing:-.2px;
-  display:flex;align-items:center;justify-content:center;gap:10px;
-  box-shadow:0 6px 20px rgba(91,141,239,.35);
-  transition:transform .12s,box-shadow .2s,opacity .2s;margin-bottom:16px;
-}
-.big-btn:active{transform:scale(.97);box-shadow:0 3px 12px rgba(91,141,239,.3)}
-.big-btn:disabled{opacity:.45;pointer-events:none}
-.big-btn .ico{width:22px;height:22px}
+/* ========== BUTTONS ========== */
+.big-btn{width:100%;background:var(--accent);color:#fff;border-radius:var(--r);padding:18px;
+  font-size:17px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:10px;
+  box-shadow:0 6px 20px rgba(91,141,239,.32);transition:transform .12s,opacity .2s;margin-bottom:14px}
+.big-btn:active{transform:scale(.97)}
+.big-btn svg{width:21px;height:21px;flex:0 0 21px}
 .big-btn.secondary{background:var(--card);color:var(--text);border:1px solid var(--line-2);box-shadow:none}
+.big-btn.green{background:var(--green);box-shadow:0 6px 20px rgba(63,185,80,.3)}
 
-.sec-title{font-size:14px;font-weight:700;color:var(--text-2);margin:22px 2px 12px;display:flex;align-items:center;gap:8px}
+.sec-title{font-size:14px;font-weight:700;color:var(--text-2);margin:22px 2px 12px;
+  display:flex;align-items:center;justify-content:space-between;gap:8px}
+.sec-title .cnt{background:var(--card);border:1px solid var(--line);border-radius:99px;
+  padding:2px 10px;font-size:12px;color:var(--text-3);font-weight:600}
 
-.field{margin-bottom:15px}
-.field label{display:block;font-size:13.5px;font-weight:500;color:var(--text-2);margin-bottom:7px}
-.field input,.field textarea,.field select{
-  width:100%;background:var(--bg-2);border:1px solid var(--line);
-  border-radius:var(--radius-sm);padding:14px 15px;color:var(--text);
-  transition:border-color .2s,background .2s;
-}
-.field input:focus,.field textarea:focus,.field select:focus{
-  outline:none;border-color:var(--accent);background:var(--card);
-}
-.quick-amt{display:flex;gap:8px;flex-wrap:wrap;margin-top:9px}
-.quick-amt button{
-  background:var(--card);border:1px solid var(--line);border-radius:9px;
-  padding:7px 13px;font-size:13.5px;font-weight:500;color:var(--text-2);transition:.15s;
-}
-.quick-amt button:active{border-color:var(--accent);color:var(--accent-2)}
+/* ========== CALENDAR ========== */
+.cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;gap:10px}
+.cal-head .mtitle{font-size:18px;font-weight:700}
+.cal-nav{display:flex;gap:7px}
+.cal-nav button{width:38px;height:38px;border-radius:10px;background:var(--card);
+  border:1px solid var(--line);display:flex;align-items:center;justify-content:center;
+  color:var(--text-2);transition:.15s}
+.cal-nav button:hover{border-color:var(--accent);color:var(--accent-2)}
+.cal-nav button svg{width:18px;height:18px}
+.cal-nav .today-btn{width:auto;padding:0 14px;font-size:13.5px;font-weight:600}
 
-.filter-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
-.filter-bar input{
-  flex:1;min-width:120px;background:var(--card);border:1px solid var(--line);
-  border-radius:10px;padding:10px 12px;font-size:14px;color:var(--text);
+.cal{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  padding:14px;margin-bottom:16px;overflow:hidden}
+.cal-dow{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-bottom:7px}
+.cal-dow div{text-align:center;font-size:11.5px;font-weight:600;color:var(--text-3);padding:5px 0}
+.cal-days{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+.cday{
+  aspect-ratio:1;border-radius:10px;background:var(--bg-2);border:1px solid transparent;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+  font-size:14px;font-weight:600;color:var(--text-2);transition:.15s;position:relative;padding:2px;
 }
-.chip-row{display:flex;gap:8px;margin-bottom:14px;overflow-x:auto;padding-bottom:2px}
-.chip{
-  white-space:nowrap;background:var(--card);border:1px solid var(--line);
-  border-radius:99px;padding:7px 15px;font-size:13.5px;font-weight:500;color:var(--text-2);transition:.15s;
+.cday:hover{border-color:var(--line-2);background:var(--card-2)}
+.cday.out{opacity:.25;pointer-events:none}
+.cday.today{border-color:var(--accent);color:var(--accent-2)}
+.cday.has{background:var(--card-2)}
+.cday .pips{display:flex;gap:2.5px;height:5px;align-items:center}
+.cday .pip{width:5px;height:5px;border-radius:50%}
+.pip.planned{background:var(--text-3)}
+.pip.ready{background:var(--amber)}
+.pip.done{background:var(--green)}
+.pip.cancel{background:var(--red);opacity:.6}
+
+/* ========== WORKSHOP ITEM ========== */
+.ws{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--r-sm);
+  padding:14px 15px;margin-bottom:10px;animation:fade .3s ease;
 }
+.ws.ready{border-color:rgba(227,160,8,.4);background:linear-gradient(var(--amber-bg),var(--amber-bg)),var(--card)}
+.ws-top{display:flex;align-items:flex-start;gap:12px}
+.ws .icon{width:42px;height:42px;border-radius:12px;flex:0 0 42px;
+  display:flex;align-items:center;justify-content:center}
+.ws .icon svg{width:20px;height:20px}
+.ws.planned .icon{background:var(--accent-bg);color:var(--accent-2)}
+.ws.ready   .icon{background:var(--amber-bg);color:var(--amber)}
+.ws.done    .icon{background:var(--green-bg);color:var(--green)}
+.ws.cancel  .icon{background:var(--red-bg);color:var(--red)}
+.ws .body{flex:1;min-width:0}
+.ws .t1{font-size:15px;font-weight:600;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.ws .t2{font-size:12.5px;color:var(--text-3);margin-top:2px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.ws .t2 svg{width:13px;height:13px;flex:0 0 13px;opacity:.8}
+.ws .price{font-size:15px;font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap;color:var(--text-2)}
+.ws.done .price{color:var(--green)}
+.ws.cancel .price{text-decoration:line-through;opacity:.5}
+
+.badge{font-size:11px;font-weight:700;padding:2.5px 9px;border-radius:99px;white-space:nowrap}
+.b-planned{background:var(--accent-bg);color:var(--accent-2)}
+.b-ready{background:var(--amber-bg);color:var(--amber)}
+.b-done{background:var(--green-bg);color:var(--green)}
+.b-cancel{background:var(--red-bg);color:var(--red)}
+
+.ws-acts{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.ws-acts button{
+  flex:1;min-width:110px;padding:11px;border-radius:9px;font-size:13.5px;font-weight:600;
+  border:1px solid var(--line-2);background:var(--bg-2);color:var(--text-2);transition:.15s;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+}
+.ws-acts button svg{width:15px;height:15px;flex:0 0 15px}
+.ws-acts button:hover{border-color:var(--line-2);background:var(--card-2)}
+.ws-acts .primary{background:var(--green);border-color:var(--green);color:#fff}
+.ws-acts .primary:hover{background:#35a446;border-color:#35a446}
+.ws-acts .danger:hover{background:var(--red-bg);border-color:var(--red);color:var(--red)}
+.ws-acts .locked{opacity:.45;cursor:not-allowed;pointer-events:none}
+
+.empty{text-align:center;padding:44px 20px;color:var(--text-3)}
+.empty svg{width:44px;height:44px;opacity:.35;margin-bottom:13px}
+.empty p{font-size:14px}
+
+/* ========== HISTORY / TX ========== */
+.chip-row{display:flex;gap:8px;margin-bottom:13px;overflow-x:auto;padding-bottom:2px}
+.chip{white-space:nowrap;background:var(--card);border:1px solid var(--line);border-radius:99px;
+  padding:7px 15px;font-size:13.5px;font-weight:500;color:var(--text-2);transition:.15s}
 .chip.active{background:var(--accent-bg);border-color:var(--accent);color:var(--accent-2)}
+.filter-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.filter-bar input{flex:1;min-width:130px;background:var(--card);border:1px solid var(--line);
+  border-radius:10px;padding:10px 12px;font-size:14px;color:var(--text)}
 
-.tx{
-  display:flex;align-items:center;gap:13px;
-  background:var(--card);border:1px solid var(--line);
-  border-radius:var(--radius-sm);padding:14px 15px;margin-bottom:9px;
-  animation:fade .3s ease;
-}
-.tx .icon{
-  width:42px;height:42px;border-radius:12px;flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;
-}
-.tx .icon svg{width:21px;height:21px}
+.tx{display:flex;align-items:center;gap:13px;background:var(--card);border:1px solid var(--line);
+  border-radius:var(--r-sm);padding:14px 15px;margin-bottom:9px;animation:fade .3s ease}
+.tx .icon{width:40px;height:40px;border-radius:11px;flex:0 0 40px;display:flex;align-items:center;justify-content:center}
+.tx .icon svg{width:19px;height:19px}
 .tx.payment .icon{background:var(--green-bg);color:var(--green)}
 .tx.workshop .icon{background:var(--accent-bg);color:var(--accent-2)}
 .tx .body{flex:1;min-width:0}
-.tx .body .t1{font-size:15px;font-weight:600}
-.tx .body .t2{font-size:12.5px;color:var(--text-3);margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tx .t1{font-size:15px;font-weight:600}
+.tx .t2{font-size:12.5px;color:var(--text-3);margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .tx .amt{font-size:16px;font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap}
 .tx .amt.plus{color:var(--green)}.tx .amt.minus{color:var(--text-2)}
-.tx .del{
-  width:32px;height:32px;border-radius:9px;flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;color:var(--text-3);transition:.15s;
-}
-.tx .del:active{background:var(--red-bg);color:var(--red)}
-.tx .del svg{width:17px;height:17px}
+.tx .del{width:32px;height:32px;border-radius:9px;flex:0 0 32px;display:flex;align-items:center;
+  justify-content:center;color:var(--text-3);transition:.15s}
+.tx .del:hover{background:var(--red-bg);color:var(--red)}
+.tx .del svg{width:16px;height:16px}
 
-.empty{text-align:center;padding:50px 20px;color:var(--text-3)}
-.empty svg{width:46px;height:46px;opacity:.4;margin-bottom:14px}
-.empty p{font-size:14px}
+/* ========== CHARTS ========== */
+.chart-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  padding:18px 16px 14px;margin-bottom:16px}
+.chart-card h3{font-size:14px;font-weight:700;color:var(--text-2);margin-bottom:14px;
+  display:flex;align-items:center;gap:8px}
+.chart-card h3 svg{width:16px;height:16px;flex:0 0 16px}
+.chart-wrap{position:relative;height:210px}
 
-.chart-card{
-  background:var(--card);border:1px solid var(--line);
-  border-radius:var(--radius);padding:18px 16px 14px;margin-bottom:16px;
-}
-.chart-card h3{font-size:14px;font-weight:700;color:var(--text-2);margin-bottom:14px;display:flex;align-items:center;gap:8px}
-.chart-wrap{position:relative;height:200px}
-
-.set-row{
-  display:flex;align-items:center;justify-content:space-between;gap:14px;
-  background:var(--card);border:1px solid var(--line);
-  border-radius:var(--radius-sm);padding:16px 15px;margin-bottom:11px;
-}
-.set-row .info .t{font-size:15px;font-weight:600}
-.set-row .info .d{font-size:12.5px;color:var(--text-3);margin-top:2px}
-.set-row .price-in{width:96px}
-.set-row .price-in input{
-  width:100%;text-align:center;background:var(--bg-2);border:1px solid var(--line);
-  border-radius:10px;padding:11px;color:var(--text);font-weight:700;font-size:16px;
-}
+/* ========== SETTINGS ========== */
+.set-row{display:flex;align-items:center;justify-content:space-between;gap:14px;background:var(--card);
+  border:1px solid var(--line);border-radius:var(--r-sm);padding:16px 15px;margin-bottom:11px}
+.set-row .t{font-size:15px;font-weight:600}
+.set-row .d{font-size:12.5px;color:var(--text-3);margin-top:2px}
+.set-row .price-in{width:100px;flex:0 0 100px}
+.set-row .price-in input{width:100%;text-align:center;background:var(--bg-2);border:1px solid var(--line);
+  border-radius:10px;padding:11px;color:var(--text);font-weight:700}
 .set-row .price-in input:focus{outline:none;border-color:var(--accent)}
-.danger-btn{
-  width:100%;background:var(--red-bg);color:var(--red);border:1px solid rgba(240,97,109,.25);
-  border-radius:var(--radius-sm);padding:14px;font-size:14.5px;font-weight:600;transition:.15s;margin-top:6px;
-}
-.danger-btn:active{background:rgba(240,97,109,.2)}
+.danger-btn{width:100%;background:var(--red-bg);color:var(--red);border:1px solid rgba(240,97,109,.25);
+  border-radius:var(--r-sm);padding:14px;font-size:14.5px;font-weight:600;transition:.15s;margin-top:6px}
+.danger-btn:hover{background:rgba(240,97,109,.2)}
 
-.nav{
-  position:fixed;bottom:0;left:0;right:0;z-index:30;
-  max-width:520px;margin:0 auto;
-  background:rgba(21,27,35,.92);backdrop-filter:blur(16px);
-  border-top:1px solid var(--line);
-  display:flex;justify-content:space-around;
-  padding:9px 6px calc(9px + env(safe-area-inset-bottom,0));
-}
-.nav button{
-  display:flex;flex-direction:column;align-items:center;gap:4px;
-  padding:5px 12px;border-radius:12px;color:var(--text-3);
-  font-size:11px;font-weight:500;transition:color .2s;flex:1;
-}
-.nav button svg{width:23px;height:23px;transition:transform .2s}
-.nav button.active{color:var(--accent-2)}
-.nav button.active svg{transform:translateY(-1px)}
+.type-mgr{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.type-tag{display:flex;align-items:center;gap:7px;background:var(--card-2);border:1px solid var(--line-2);
+  border-radius:99px;padding:6px 8px 6px 13px;font-size:13.5px;font-weight:500}
+.type-tag button{width:19px;height:19px;border-radius:50%;background:var(--bg-2);color:var(--text-3);
+  display:flex;align-items:center;justify-content:center;font-size:14px;line-height:1;transition:.15s}
+.type-tag button:hover{background:var(--red-bg);color:var(--red)}
 
-.sheet-bg{
-  position:fixed;inset:0;z-index:40;background:rgba(0,0,0,.55);
-  display:flex;align-items:flex-end;justify-content:center;
-  opacity:0;pointer-events:none;transition:opacity .25s;
-}
+/* ========== BOTTOM NAV (mobile) ========== */
+.bnav{position:fixed;bottom:0;inset-inline:0;z-index:30;background:rgba(21,27,35,.94);
+  backdrop-filter:blur(16px);border-top:1px solid var(--line);display:flex;justify-content:space-around;
+  padding:8px 4px calc(8px + env(safe-area-inset-bottom,0))}
+.bnav button{display:flex;flex-direction:column;align-items:center;gap:3px;padding:5px 8px;
+  border-radius:12px;color:var(--text-3);font-size:10.5px;font-weight:500;flex:1;transition:color .2s}
+.bnav button svg{width:22px;height:22px}
+.bnav button.active{color:var(--accent-2)}
+
+/* ========== SHEET / MODAL ========== */
+.sheet-bg{position:fixed;inset:0;z-index:40;background:rgba(0,0,0,.6);display:flex;
+  align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s}
 .sheet-bg.open{opacity:1;pointer-events:auto}
-.sheet{
-  width:100%;max-width:520px;background:var(--bg-2);
-  border-radius:22px 22px 0 0;border-top:1px solid var(--line-2);
-  padding:12px 20px calc(24px + env(safe-area-inset-bottom,0));
-  transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1);
-  max-height:88vh;overflow-y:auto;
-}
+.sheet{width:100%;max-width:540px;background:var(--bg-2);border-radius:22px 22px 0 0;
+  border-top:1px solid var(--line-2);padding:12px 20px calc(24px + env(safe-area-inset-bottom,0));
+  transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1);max-height:90vh;overflow-y:auto}
 .sheet-bg.open .sheet{transform:translateY(0)}
-.sheet .handle{width:38px;height:4px;border-radius:99px;background:var(--line-2);margin:0 auto 18px}
-.sheet h2{font-size:19px;font-weight:700;margin-bottom:18px}
-.sheet .submit{
-  width:100%;background:var(--accent);color:#fff;border-radius:var(--radius-sm);
-  padding:16px;font-size:16px;font-weight:700;margin-top:8px;transition:transform .12s;
-}
-.sheet .submit:active{transform:scale(.98)}
+.sheet .handle{width:38px;height:4px;border-radius:99px;background:var(--line-2);margin:0 auto 16px}
+.sheet h2{font-size:19px;font-weight:700;margin-bottom:4px}
+.sheet .h-sub{font-size:13px;color:var(--text-3);margin-bottom:18px}
 
-.toast{
-  position:fixed;bottom:108px;left:50%;transform:translateX(-50%) translateY(20px);
-  background:var(--card-2);border:1px solid var(--line-2);color:var(--text);
-  padding:12px 20px;border-radius:99px;font-size:14px;font-weight:500;
-  z-index:50;opacity:0;pointer-events:none;transition:.3s;
-  box-shadow:var(--shadow);display:flex;align-items:center;gap:8px;
-}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:13.5px;font-weight:500;color:var(--text-2);margin-bottom:7px}
+.field input,.field select,.field textarea{width:100%;background:var(--bg-2);border:1px solid var(--line);
+  border-radius:var(--r-sm);padding:13px 14px;color:var(--text);transition:.2s}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--accent);background:var(--card)}
+.field .row{display:flex;gap:10px}
+.field .row>*{flex:1}
+.pill-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.pill-row button{background:var(--card);border:1px solid var(--line);border-radius:9px;
+  padding:8px 14px;font-size:13.5px;font-weight:500;color:var(--text-2);transition:.15s}
+.pill-row button:hover{border-color:var(--accent);color:var(--accent-2)}
+.pill-row button.sel{background:var(--accent-bg);border-color:var(--accent);color:var(--accent-2)}
+.submit{width:100%;background:var(--accent);color:#fff;border-radius:var(--r-sm);padding:15px;
+  font-size:16px;font-weight:700;margin-top:6px;transition:transform .12s}
+.submit:active{transform:scale(.98)}
+
+/* ========== TOAST / LOADER ========== */
+.toast{position:fixed;bottom:104px;left:50%;transform:translateX(-50%) translateY(18px);
+  background:var(--card-2);border:1px solid var(--line-2);color:var(--text);padding:12px 20px;
+  border-radius:99px;font-size:14px;font-weight:500;z-index:60;opacity:0;pointer-events:none;
+  transition:.3s;box-shadow:var(--shadow);display:flex;align-items:center;gap:8px}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-.toast svg{width:17px;height:17px;color:var(--green)}
+.toast svg{width:17px;height:17px;flex:0 0 17px;color:var(--green)}
 .toast.err svg{color:var(--red)}
 
-.loader{
-  position:fixed;inset:0;z-index:60;background:var(--bg);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;
-  transition:opacity .4s;
-}
+.loader{position:fixed;inset:0;z-index:70;background:var(--bg);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:16px;transition:opacity .4s}
 .loader.gone{opacity:0;pointer-events:none}
-.loader .ring{
-  width:38px;height:38px;border-radius:50%;
-  border:3px solid var(--line);border-top-color:var(--accent);
-  animation:spin .8s linear infinite;
-}
+.loader .ring{width:38px;height:38px;border-radius:50%;border:3px solid var(--line);
+  border-top-color:var(--accent);animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .loader p{color:var(--text-3);font-size:14px}
 
-@media(max-width:360px){
-  .hero .amount{font-size:38px}
+/* ========== DESKTOP ========== */
+@media(min-width:900px){
+  .sidebar{display:flex}
+  .bnav{display:none}
+  .topbar{padding:24px 28px 12px}
+  .topbar h1 .dot{display:none}
+  .wrap{padding:0 28px 40px}
+  .grid{grid-template-columns:repeat(4,1fr)}
+  .hero{padding:30px 28px}
+  .hero .amount{font-size:52px}
+  .cal-days .cday{aspect-ratio:auto;height:82px;justify-content:flex-start;padding:9px 8px;font-size:15px}
+  .cday .pips{margin-top:auto;height:auto}
+  .cday .pip{width:6px;height:6px}
+  .cal{padding:18px}
+  .cal-dow div{font-size:12.5px}
+  .sheet-bg{align-items:center}
+  .sheet{border-radius:var(--r);max-width:480px;transform:scale(.94);padding:24px 26px 26px;
+    border:1px solid var(--line-2)}
+  .sheet-bg.open .sheet{transform:scale(1)}
+  .sheet .handle{display:none}
+  .home-cols{display:grid;grid-template-columns:1.15fr .85fr;gap:22px;align-items:start}
+  .toast{bottom:34px}
+  .chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .chart-grid .full{grid-column:span 2}
+}
+@media(max-width:520px){
+  .hero .amount{font-size:40px}
   .stat .v{font-size:23px}
+  .cday{font-size:13px}
 }
 </style>
 </head>
 <body>
 
-<div class="loader" id="loader">
-  <div class="ring"></div>
-  <p>מתחבר לשרת…</p>
+<div class="loader" id="loader"><div class="ring"></div><p>מתחבר לשרת…</p></div>
+
+<div class="shell">
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="sidebar">
+    <div class="brand"><span class="dot" id="dotD"></span> ניהול סדנאות</div>
+    <nav id="navD"></nav>
+    <div class="foot">
+      <div id="footPrice">—</div>
+      <div style="margin-top:3px">מסונכרן בענן</div>
+    </div>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <div class="main">
+    <div class="topbar">
+      <div class="inner">
+        <div>
+          <h1><span class="dot" id="dotM"></span> <span id="pageTitle">סקירה</span></h1>
+          <div class="sub" id="pageSub">—</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="wrap">
+
+      <!-- ===== HOME ===== -->
+      <div class="view" id="v-home">
+        <div class="home-cols">
+          <div>
+            <div class="hero" id="hero">
+              <div class="label">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                <span id="hLabel">יתרה נוכחית</span>
+              </div>
+              <div class="amount"><span id="hAmount">0</span><span class="cur">₪</span></div>
+              <div id="hStatus"></div>
+              <div class="sub" id="hSub"></div>
+            </div>
+
+            <div class="grid">
+              <div class="stat">
+                <div class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>סדנאות שבוצעו</div>
+                <div class="v" id="sDone">0</div>
+              </div>
+              <div class="stat">
+                <div class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18"/></svg>סה"כ שולם</div>
+                <div class="v accent" id="sPaid">0<span class="u"> ₪</span></div>
+              </div>
+              <div class="stat">
+                <div class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/></svg>שולמו מראש</div>
+                <div class="v green" id="sPre">0<span class="u"> סדנאות</span></div>
+              </div>
+              <div class="stat">
+                <div class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>טרם שולמו</div>
+                <div class="v amber" id="sUnpaid">0<span class="u"> סדנאות</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <button class="big-btn" onclick="openWs()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14"/></svg>
+              קביעת סדנה
+            </button>
+            <button class="big-btn secondary" onclick="openPay()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20M6 15h4"/></svg>
+              הוספת תשלום
+            </button>
+
+            <div class="sec-title">ממתינות לאישור <span class="cnt" id="cntReady">0</span></div>
+            <div id="readyList"></div>
+
+            <div class="sec-title">סדנאות קרובות <span class="cnt" id="cntUp">0</span></div>
+            <div id="upcomingList"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== CALENDAR ===== -->
+      <div class="view hidden" id="v-cal">
+        <div class="cal-head">
+          <div class="mtitle" id="calTitle">—</div>
+          <div class="cal-nav">
+            <button onclick="shiftMonth(-1)" aria-label="חודש קודם"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></button>
+            <button class="today-btn" onclick="goToday()">היום</button>
+            <button onclick="shiftMonth(1)" aria-label="חודש הבא"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg></button>
+          </div>
+        </div>
+        <div class="cal">
+          <div class="cal-dow"><div>א</div><div>ב</div><div>ג</div><div>ד</div><div>ה</div><div>ו</div><div>ש</div></div>
+          <div class="cal-days" id="calDays"></div>
+        </div>
+        <div class="sec-title"><span id="dayTitle">סדנאות בחודש זה</span> <span class="cnt" id="cntMonth">0</span></div>
+        <div id="dayList"></div>
+      </div>
+
+      <!-- ===== HISTORY ===== -->
+      <div class="view hidden" id="v-hist">
+        <div class="chip-row" id="chips">
+          <button class="chip active" onclick="setFilter('all',this)">הכל</button>
+          <button class="chip" onclick="setFilter('payment',this)">תשלומים</button>
+          <button class="chip" onclick="setFilter('workshop',this)">סדנאות שבוצעו</button>
+        </div>
+        <div class="filter-bar">
+          <input type="date" id="fromDate" onchange="renderHist()">
+          <input type="date" id="toDate" onchange="renderHist()">
+        </div>
+        <div id="histList"></div>
+      </div>
+
+      <!-- ===== REPORTS ===== -->
+      <div class="view hidden" id="v-rep">
+        <div class="chart-grid">
+          <div class="chart-card">
+            <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>תשלומים לפי חודש</h3>
+            <div class="chart-wrap"><canvas id="cPay"></canvas></div>
+          </div>
+          <div class="chart-card">
+            <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>סדנאות שבוצעו לפי חודש</h3>
+            <div class="chart-wrap"><canvas id="cWs"></canvas></div>
+          </div>
+          <div class="chart-card full">
+            <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18M7 15l4-4 3 3 5-6"/></svg>יתרה מצטברת</h3>
+            <div class="chart-wrap"><canvas id="cBal"></canvas></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== SETTINGS ===== -->
+      <div class="view hidden" id="v-set">
+        <div class="sec-title">כללי</div>
+        <div class="set-row">
+          <div>
+            <div class="t">מחיר לסדנה</div>
+            <div class="d">משפיע על כל החישובים במערכת</div>
+          </div>
+          <div class="price-in"><input type="number" id="priceIn" inputmode="numeric" onchange="setPrice(this.value)"></div>
+        </div>
+        <div class="set-row">
+          <div>
+            <div class="t">שעת סיום ברירת מחדל</div>
+            <div class="d">תופיע אוטומטית בקביעת סדנה חדשה</div>
+          </div>
+          <div class="price-in"><input type="time" id="defTimeIn" onchange="setDefTime(this.value)" style="font-size:15px"></div>
+        </div>
+
+        <div class="sec-title">סוגי סדנאות</div>
+        <div class="set-row" style="flex-direction:column;align-items:stretch;gap:12px">
+          <div>
+            <div class="t">רשימת הסוגים</div>
+            <div class="d">יופיעו כאפשרויות בקביעת סדנה</div>
+          </div>
+          <div class="type-mgr" id="typeMgr"></div>
+          <div style="display:flex;gap:8px">
+            <input type="text" id="newType" placeholder="שם סוג חדש" style="flex:1;background:var(--bg-2);border:1px solid var(--line);border-radius:10px;padding:11px 13px;color:var(--text)">
+            <button onclick="addType()" style="background:var(--accent);color:#fff;border-radius:10px;padding:0 20px;font-weight:600">הוסף</button>
+          </div>
+        </div>
+
+        <div class="sec-title">נתונים</div>
+        <div class="set-row">
+          <div>
+            <div class="t">סה"כ רשומות</div>
+            <div class="d">סדנאות ותשלומים בענן</div>
+          </div>
+          <div class="v accent" id="setCount" style="font-size:22px;font-weight:800">0</div>
+        </div>
+        <button class="big-btn secondary" onclick="exportData()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+          גיבוי לקובץ
+        </button>
+        <button class="danger-btn" onclick="clearAll()">מחיקת כל הנתונים</button>
+      </div>
+
+    </div>
+  </div>
 </div>
 
-<div class="app">
-  <div class="header">
-    <h1><span class="dot" id="syncDot"></span> ניהול סדנאות</h1>
-    <p id="headerSub">מתחבר…</p>
-  </div>
-
-  <div class="view" id="view-home">
-    <div class="hero" id="hero">
-      <div class="label">
-        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-        <span id="heroLabel">יתרה נוכחית</span>
-      </div>
-      <div class="amount"><span id="heroAmount">0</span><span class="cur">₪</span></div>
-      <div id="heroStatus"></div>
-      <div class="sub" id="heroSub"></div>
-    </div>
-
-    <div class="grid">
-      <div class="stat">
-        <div class="k"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>סדנאות שבוצעו</div>
-        <div class="v" id="stWorkshops">0</div>
-      </div>
-      <div class="stat">
-        <div class="k"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18"/></svg>סה"כ שולם</div>
-        <div class="v accent" id="stPaid">0<span class="u"> ₪</span></div>
-      </div>
-      <div class="stat">
-        <div class="k"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/></svg>שולמו מראש</div>
-        <div class="v green" id="stPrepaid">0<span class="u"> סדנאות</span></div>
-      </div>
-      <div class="stat">
-        <div class="k"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>טרם שולמו</div>
-        <div class="v amber" id="stUnpaid">0<span class="u"> סדנאות</span></div>
-      </div>
-    </div>
-
-    <button class="big-btn" id="btnWs" onclick="openSheet('workshop')">
-      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14"/></svg>
-      נוספה סדנה
-    </button>
-    <button class="big-btn secondary" id="btnPay" onclick="openSheet('payment')">
-      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20M6 15h4"/></svg>
-      הוספת תשלום
-    </button>
-  </div>
-
-  <div class="view hidden" id="view-history">
-    <div class="chip-row" id="chipRow">
-      <button class="chip active" data-f="all" onclick="setFilter('all',this)">הכל</button>
-      <button class="chip" data-f="payment" onclick="setFilter('payment',this)">תשלומים</button>
-      <button class="chip" data-f="workshop" onclick="setFilter('workshop',this)">סדנאות</button>
-    </div>
-    <div class="filter-bar">
-      <input type="date" id="fromDate" onchange="renderHistory()">
-      <input type="date" id="toDate" onchange="renderHistory()">
-    </div>
-    <div id="historyList"></div>
-  </div>
-
-  <div class="view hidden" id="view-reports">
-    <div class="chart-card">
-      <h3><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>תשלומים לפי חודש</h3>
-      <div class="chart-wrap"><canvas id="chartPay"></canvas></div>
-    </div>
-    <div class="chart-card">
-      <h3><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>סדנאות לפי חודש</h3>
-      <div class="chart-wrap"><canvas id="chartWs"></canvas></div>
-    </div>
-    <div class="chart-card">
-      <h3><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18M7 15l4-4 3 3 5-6"/></svg>יתרה מצטברת</h3>
-      <div class="chart-wrap"><canvas id="chartBal"></canvas></div>
-    </div>
-  </div>
-
-  <div class="view hidden" id="view-settings">
-    <div class="sec-title">הגדרות</div>
-    <div class="set-row">
-      <div class="info">
-        <div class="t">מחיר לסדנה</div>
-        <div class="d">שינוי המחיר מעדכן את כל החישובים</div>
-      </div>
-      <div class="price-in">
-        <input type="number" id="priceInput" inputmode="numeric" onchange="updatePrice(this.value)">
-      </div>
-    </div>
-    <div class="sec-title">נתונים</div>
-    <div class="set-row">
-      <div class="info">
-        <div class="t">סה"כ תנועות</div>
-        <div class="d">מסונכרן בין כל המכשירים</div>
-      </div>
-      <div class="v accent" id="setCount" style="font-size:22px;font-weight:800">0</div>
-    </div>
-    <button class="big-btn secondary" onclick="exportData()" style="margin-top:6px">
-      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-      גיבוי נתונים (קובץ)
-    </button>
-    <button class="danger-btn" onclick="clearAll()">מחיקת כל הנתונים</button>
-    <p style="text-align:center;color:var(--text-3);font-size:12px;margin-top:20px">הנתונים מסונכרנים בענן בזמן אמת</p>
-  </div>
-</div>
-
-<nav class="nav" id="nav">
-  <button class="active" onclick="nav('home',this)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10.5 12 3l9 7.5M5 9v11h14V9"/></svg>בית
-  </button>
-  <button onclick="nav('history',this)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 2"/><circle cx="12" cy="12" r="9"/></svg>היסטוריה
-  </button>
-  <button onclick="nav('reports',this)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><rect x="7" y="10" width="3" height="7"/><rect x="13" y="6" width="3" height="11"/></svg>דוחות
-  </button>
-  <button onclick="nav('settings',this)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>הגדרות
-  </button>
-</nav>
+<!-- ============ BOTTOM NAV ============ -->
+<nav class="bnav" id="navM"></nav>
 
 <div class="sheet-bg" id="sheetBg" onclick="if(event.target===this)closeSheet()">
   <div class="sheet" id="sheet"></div>
 </div>
-
 <div class="toast" id="toast"></div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
-import {
-  getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot,
-  getDocs, writeBatch
-} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+import { getFirestore, collection, doc, setDoc, updateDoc, deleteDoc,
+         onSnapshot, getDocs, writeBatch }
+  from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 
-/* ===================== FIREBASE CONFIG ===================== */
 const firebaseConfig = {
   apiKey: "AIzaSyCHGpdHL-xLTUaw4Aa78GvKaT3uFo2vfKY",
   authDomain: "work-site-f58b5.firebaseapp.com",
@@ -421,308 +540,464 @@ const firebaseConfig = {
   messagingSenderId: "835234633955",
   appId: "1:835234633955:web:e7291d8c43ab36d3450dd6"
 };
-
 const app = initializeApp(firebaseConfig);
 const db  = getFirestore(app);
+const wsCol  = collection(db,"workshops");
+const payCol = collection(db,"payments");
+const cfgDoc = doc(db,"settings","config");
 
-const txCol       = collection(db, "transactions");
-const settingsDoc = doc(db, "settings", "config");
+/* ========================= STATE ========================= */
+const DEFAULTS = { price:100, defaultTime:"21:00", types:["סדנת בישול","סדנת ילדים","אירוע פרטי"] };
+const S = { workshops:[], payments:[], cfg:{...DEFAULTS}, ready:0 };
 
-/* ===================== STATE ===================== */
-const STATE = { transactions: [], price: 100, ready: false };
-
-/* ===================== CORE CALCULATION ===================== */
-function compute(){
-  const price = STATE.price;
-  const txs   = STATE.transactions;
-  const totalPaid       = txs.filter(t=>t.type==='payment').reduce((s,t)=>s+t.amount,0);
-  const workshopsCount  = txs.filter(t=>t.type==='workshop').length;
-  const balance         = totalPaid - workshopsCount*price;
-  const prepaidWorkshops= balance>0 ? Math.floor(balance/price) : 0;
-  const prepaidRemainder= balance>0 ? balance%price : 0;
-  const unpaidWorkshops = balance<0 ? Math.ceil(Math.abs(balance)/price) : 0;
-  return {price,totalPaid,workshopsCount,balance,prepaidWorkshops,prepaidRemainder,unpaidWorkshops};
-}
-
-/* ===================== FORMAT ===================== */
+/* ========================= HELPERS ========================= */
 const nf = new Intl.NumberFormat('he-IL');
 const money = n => nf.format(Math.round(n));
-const fmtDate = iso => new Date(iso).toLocaleDateString('he-IL',{day:'numeric',month:'short',year:'numeric'});
-const monthKey = iso => { const d=new Date(iso); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'); };
-const monthLabel = k => { const[y,m]=k.split('-'); return new Date(y,m-1).toLocaleDateString('he-IL',{month:'short',year:'2-digit'}); };
-const todayISO = () => new Date().toISOString().slice(0,10);
-const escapeHtml = s => s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const pad = n => String(n).padStart(2,'0');
+const todayISO = () => { const d=new Date(); return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`; };
+const esc = s => String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const newId = () => Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+const HE_MONTHS = ['ינואר','פברואר','מרץ','אפריל','מאי','יוני','יולי','אוגוסט','ספטמבר','אוקטובר','נובמבר','דצמבר'];
+const fmtDate = iso => { const [y,m,d]=iso.split('-'); return `${+d} ${HE_MONTHS[+m-1]} ${y}`; };
+const fmtShort = iso => { const [y,m,d]=iso.split('-'); return `${+d}/${+m}`; };
+const monthKey = iso => iso.slice(0,7);
+const monthLabel = k => { const [y,m]=k.split('-'); return `${HE_MONTHS[+m-1].slice(0,3)}׳ ${y.slice(2)}`; };
 
-/* ===================== RENDER: HOME ===================== */
+/* A workshop is "ready" when its end datetime has passed and it is still planned */
+function endTs(w){ return new Date(`${w.date}T${w.time||'21:00'}:00`).getTime(); }
+function wsState(w){
+  if(w.status==='done')   return 'done';
+  if(w.status==='cancel') return 'cancel';
+  return Date.now() >= endTs(w) ? 'ready' : 'planned';
+}
+const STATE_LABEL = { planned:'מתוכננת', ready:'ניתן לאשר', done:'בוצעה', cancel:'בוטלה' };
+
+/* ========================= CORE CALC ========================= */
+function compute(){
+  const price = S.cfg.price;
+  const totalPaid = S.payments.reduce((s,p)=>s+p.amount,0);
+  const done      = S.workshops.filter(w=>w.status==='done');
+  const balance   = totalPaid - done.length*price;
+  return {
+    price, totalPaid,
+    doneCount: done.length,
+    balance,
+    prepaid:   balance>0 ? Math.floor(balance/price) : 0,
+    remainder: balance>0 ? balance%price : 0,
+    unpaid:    balance<0 ? Math.ceil(Math.abs(balance)/price) : 0,
+    readyCount: S.workshops.filter(w=>wsState(w)==='ready').length,
+    plannedCount: S.workshops.filter(w=>wsState(w)==='planned').length
+  };
+}
+
+/* ========================= NAV ========================= */
+const PAGES = [
+  {id:'home', label:'סקירה',    sub:'מצב החשבון',       icon:'<path d="M3 10.5 12 3l9 7.5M5 9v11h14V9"/>'},
+  {id:'cal',  label:'יומן',     sub:'קביעה ואישור סדנאות', icon:'<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18M8 2v4M16 2v4"/>'},
+  {id:'hist', label:'היסטוריה', sub:'כל התנועות',        icon:'<circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/>'},
+  {id:'rep',  label:'דוחות',    sub:'גרפים חודשיים',     icon:'<path d="M3 3v18h18"/><rect x="7" y="10" width="3" height="7"/><rect x="13" y="6" width="3" height="11"/>'},
+  {id:'set',  label:'הגדרות',   sub:'מחיר וסוגי סדנאות', icon:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>'}
+];
+let page='home';
+function buildNav(){
+  const svg = p => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${p.icon}</svg>`;
+  document.getElementById('navD').innerHTML =
+    PAGES.map(p=>`<button data-p="${p.id}">${svg(p)}<span>${p.label}</span></button>`).join('');
+  document.getElementById('navM').innerHTML =
+    PAGES.map(p=>`<button data-p="${p.id}">${svg(p)}<span>${p.label}</span></button>`).join('');
+  document.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>go(b.dataset.p));
+}
+function go(id){
+  page=id;
+  PAGES.forEach(p=>document.getElementById('v-'+p.id).classList.toggle('hidden',p.id!==id));
+  document.querySelectorAll('[data-p]').forEach(b=>b.classList.toggle('active',b.dataset.p===id));
+  const p = PAGES.find(x=>x.id===id);
+  document.getElementById('pageTitle').textContent = p.label;
+  document.getElementById('pageSub').textContent   = p.sub;
+  if(id==='rep')  renderReports();
+  if(id==='hist') renderHist();
+  if(id==='set')  renderSettings();
+  if(id==='cal')  renderCal();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+window.go = go;
+
+/* ========================= RENDER: HOME ========================= */
 function renderHome(){
   const c = compute();
   const hero = document.getElementById('hero');
-  document.getElementById('heroAmount').textContent = money(Math.abs(c.balance));
-  const labelEl  = document.getElementById('heroLabel');
-  const statusEl = document.getElementById('heroStatus');
-  const subEl    = document.getElementById('heroSub');
+  document.getElementById('hAmount').textContent = money(Math.abs(c.balance));
+  const L=document.getElementById('hLabel'), St=document.getElementById('hStatus'), Sb=document.getElementById('hSub');
 
   if(c.balance>0){
     hero.style.setProperty('--glow','var(--green-bg)');
-    labelEl.textContent='אבא שילם מראש';
-    statusEl.innerHTML='<div class="status st-credit"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m5 12 5 5L20 7"/></svg>יש לך יתרת זכות</div>';
-    let s=`נותרו <b>${c.prepaidWorkshops}</b> סדנאות ששולמו מראש`;
-    if(c.prepaidRemainder>0) s+=` <b>+ ${money(c.prepaidRemainder)} ₪</b>`;
-    subEl.innerHTML=s;
+    L.textContent='אבא שילם מראש';
+    St.innerHTML='<div class="status st-credit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m5 12 5 5L20 7"/></svg>יש לך יתרת זכות</div>';
+    let s=`נותרו <b>${c.prepaid}</b> סדנאות ששולמו מראש`;
+    if(c.remainder>0) s+=` <b>+ ${money(c.remainder)} ₪</b>`;
+    Sb.innerHTML=s;
   }else if(c.balance<0){
     hero.style.setProperty('--glow','var(--red-bg)');
-    labelEl.textContent='אבא חייב לך';
-    statusEl.innerHTML='<div class="status st-debt"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 8v5M12 16h.01"/><circle cx="12" cy="12" r="9"/></svg>קיים חוב אליך</div>';
-    subEl.innerHTML=`שווה ערך ל־<b>${c.unpaidWorkshops}</b> סדנאות שטרם שולמו`;
+    L.textContent='אבא חייב לך';
+    St.innerHTML='<div class="status st-debt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 8v5M12 16h.01"/><circle cx="12" cy="12" r="9"/></svg>קיים חוב אליך</div>';
+    Sb.innerHTML=`שווה ערך ל־<b>${c.unpaid}</b> סדנאות שטרם שולמו`;
   }else{
     hero.style.setProperty('--glow','var(--accent-bg)');
-    labelEl.textContent='יתרה נוכחית';
-    statusEl.innerHTML='<div class="status st-even"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14"/></svg>החשבון מאוזן</div>';
-    subEl.innerHTML='אין חוב לאף צד';
+    L.textContent='יתרה נוכחית';
+    St.innerHTML='<div class="status st-even"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14"/></svg>החשבון מאוזן</div>';
+    Sb.innerHTML='אין חוב לאף צד';
   }
 
-  document.getElementById('stWorkshops').textContent = c.workshopsCount;
-  document.getElementById('stPaid').innerHTML    = money(c.totalPaid)+'<span class="u"> ₪</span>';
-  document.getElementById('stPrepaid').innerHTML = c.prepaidWorkshops+'<span class="u"> סדנאות</span>';
-  document.getElementById('stUnpaid').innerHTML  = c.unpaidWorkshops+'<span class="u"> סדנאות</span>';
-  document.getElementById('headerSub').textContent = `מחיר סדנה: ${money(c.price)} ₪`;
+  document.getElementById('sDone').textContent   = c.doneCount;
+  document.getElementById('sPaid').innerHTML     = money(c.totalPaid)+'<span class="u"> ₪</span>';
+  document.getElementById('sPre').innerHTML      = c.prepaid+'<span class="u"> סדנאות</span>';
+  document.getElementById('sUnpaid').innerHTML   = c.unpaid+'<span class="u"> סדנאות</span>';
+  document.getElementById('footPrice').textContent = `מחיר סדנה: ${money(c.price)} ₪`;
+
+  // ready + upcoming lists
+  const ready = S.workshops.filter(w=>wsState(w)==='ready')
+    .sort((a,b)=>endTs(a)-endTs(b));
+  const upcoming = S.workshops.filter(w=>wsState(w)==='planned')
+    .sort((a,b)=>endTs(a)-endTs(b)).slice(0,5);
+
+  document.getElementById('cntReady').textContent = ready.length;
+  document.getElementById('cntUp').textContent    = upcoming.length;
+  document.getElementById('readyList').innerHTML =
+    ready.length ? ready.map(wsCard).join('')
+    : `<div class="empty" style="padding:26px"><p>אין סדנאות שממתינות לאישור</p></div>`;
+  document.getElementById('upcomingList').innerHTML =
+    upcoming.length ? upcoming.map(wsCard).join('')
+    : `<div class="empty" style="padding:26px"><p>לא נקבעו סדנאות עתידיות</p></div>`;
 }
 
-/* ===================== RENDER: HISTORY ===================== */
-let currentFilter='all';
-window.setFilter = (f,btn)=>{
-  currentFilter=f;
-  document.querySelectorAll('#chipRow .chip').forEach(c=>c.classList.remove('active'));
-  btn.classList.add('active');
-  renderHistory();
+/* ========================= WORKSHOP CARD ========================= */
+const ICON = {
+  planned:'<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18M8 2v4M16 2v4"/>',
+  ready:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  done:'<path d="M20 6 9 17l-5-5"/>',
+  cancel:'<circle cx="12" cy="12" r="9"/><path d="M15 9l-6 6M9 9l6 6"/>'
 };
-function renderHistory(){
-  const list=document.getElementById('historyList');
-  const from=document.getElementById('fromDate').value;
-  const to  =document.getElementById('toDate').value;
-  let items=[...STATE.transactions];
-  if(currentFilter!=='all') items=items.filter(t=>t.type===currentFilter);
-  if(from) items=items.filter(t=>t.date>=from);
-  if(to)   items=items.filter(t=>t.date<=to);
-  items.sort((a,b)=>b.date.localeCompare(a.date)||String(b.id).localeCompare(String(a.id)));
-
-  if(!items.length){
-    list.innerHTML=`<div class="empty">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18M8 2v4M16 2v4"/></svg>
-      <p>אין תנועות להצגה</p></div>`;
-    return;
+function wsCard(w){
+  const st = wsState(w);
+  const price = S.cfg.price;
+  const acts = [];
+  if(st==='ready'){
+    acts.push(`<button class="primary" onclick="markDone('${w.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m5 12 5 5L20 7"/></svg>סדנה הסתיימה</button>`);
+    acts.push(`<button class="danger" onclick="markCancel('${w.id}')">בוטלה</button>`);
+  }else if(st==='planned'){
+    const t = new Date(endTs(w));
+    acts.push(`<button class="locked"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>ייפתח ב־${pad(t.getHours())}:${pad(t.getMinutes())}</button>`);
+    acts.push(`<button class="danger" onclick="delWs('${w.id}')">ביטול הסדנה</button>`);
+  }else{
+    acts.push(`<button onclick="reopen('${w.id}')">החזרה למתוכננת</button>`);
+    acts.push(`<button class="danger" onclick="delWs('${w.id}')">מחיקה</button>`);
   }
-  const price=STATE.price;
+  return `<div class="ws ${st}">
+    <div class="ws-top">
+      <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${ICON[st]}</svg></div>
+      <div class="body">
+        <div class="t1">${esc(w.type||'סדנה')}<span class="badge b-${st}">${STATE_LABEL[st]}</span></div>
+        <div class="t2">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18"/></svg>${fmtDate(w.date)}
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>סיום ${w.time||'21:00'}
+          ${w.note?'· '+esc(w.note):''}
+        </div>
+      </div>
+      <div class="price">${money(price)} ₪</div>
+    </div>
+    <div class="ws-acts">${acts.join('')}</div>
+  </div>`;
+}
+
+/* ========================= RENDER: CALENDAR ========================= */
+let curY, curM, selDay=null;
+function initCal(){ const d=new Date(); curY=d.getFullYear(); curM=d.getMonth(); }
+window.shiftMonth = n=>{ curM+=n; if(curM<0){curM=11;curY--} if(curM>11){curM=0;curY++} selDay=null; renderCal(); };
+window.goToday = ()=>{ initCal(); selDay=todayISO(); renderCal(); };
+
+function renderCal(){
+  document.getElementById('calTitle').textContent = `${HE_MONTHS[curM]} ${curY}`;
+  const first = new Date(curY,curM,1).getDay();
+  const dim   = new Date(curY,curM+1,0).getDate();
+  const prevDim = new Date(curY,curM,0).getDate();
+  const tISO = todayISO();
+
+  const byDate = {};
+  S.workshops.forEach(w=>{(byDate[w.date] ||= []).push(w)});
+
+  let html='';
+  for(let i=first-1;i>=0;i--) html+=`<div class="cday out">${prevDim-i}</div>`;
+  for(let d=1;d<=dim;d++){
+    const iso = `${curY}-${pad(curM+1)}-${pad(d)}`;
+    const items = byDate[iso]||[];
+    const pips = items.slice(0,4).map(w=>`<span class="pip ${wsState(w)}"></span>`).join('');
+    const cls = ['cday'];
+    if(iso===tISO) cls.push('today');
+    if(items.length) cls.push('has');
+    if(iso===selDay) cls.push('has');
+    html+=`<button class="${cls.join(' ')}" onclick="pickDay('${iso}')">
+      <span>${d}</span><span class="pips">${pips}</span></button>`;
+  }
+  const tail = (7-((first+dim)%7))%7;
+  for(let d=1;d<=tail;d++) html+=`<div class="cday out">${d}</div>`;
+  document.getElementById('calDays').innerHTML = html;
+
+  renderDayList();
+}
+window.pickDay = iso=>{ selDay = (selDay===iso? null : iso); renderCal(); if(selDay) openWs(selDay); };
+
+function renderDayList(){
+  const mk = `${curY}-${pad(curM+1)}`;
+  const items = S.workshops.filter(w=>w.date.startsWith(mk))
+    .sort((a,b)=>a.date.localeCompare(b.date)||String(a.time).localeCompare(String(b.time)));
+  document.getElementById('cntMonth').textContent = items.length;
+  document.getElementById('dayTitle').textContent = `סדנאות ב${HE_MONTHS[curM]}`;
+  document.getElementById('dayList').innerHTML = items.length
+    ? items.map(wsCard).join('')
+    : `<div class="empty">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18M8 2v4M16 2v4"/></svg>
+        <p>אין סדנאות בחודש זה — לחץ על יום כדי לקבוע</p></div>`;
+}
+
+/* ========================= RENDER: HISTORY ========================= */
+let filt='all';
+window.setFilter=(f,btn)=>{filt=f;document.querySelectorAll('#chips .chip').forEach(c=>c.classList.remove('active'));btn.classList.add('active');renderHist();};
+function renderHist(){
+  const from=document.getElementById('fromDate').value, to=document.getElementById('toDate').value;
+  let rows=[];
+  if(filt!=='workshop') rows.push(...S.payments.map(p=>({...p,_k:'payment'})));
+  if(filt!=='payment')  rows.push(...S.workshops.filter(w=>w.status==='done').map(w=>({...w,_k:'workshop'})));
+  if(from) rows=rows.filter(r=>r.date>=from);
+  if(to)   rows=rows.filter(r=>r.date<=to);
+  rows.sort((a,b)=>b.date.localeCompare(a.date)||String(b.id).localeCompare(String(a.id)));
+
   const trash='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>';
-  list.innerHTML=items.map(t=>{
-    const meta=`${fmtDate(t.date)}${t.note?' · '+escapeHtml(t.note):''}`;
-    if(t.type==='payment'){
-      return `<div class="tx payment">
-        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div>
-        <div class="body"><div class="t1">תשלום התקבל</div><div class="t2">${meta}</div></div>
-        <div class="amt plus">+${money(t.amount)} ₪</div>
-        <button class="del" onclick="delTx('${t.id}')" aria-label="מחק">${trash}</button>
-      </div>`;
-    }
+  document.getElementById('histList').innerHTML = rows.length ? rows.map(r=>{
+    if(r._k==='payment') return `<div class="tx payment">
+      <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div>
+      <div class="body"><div class="t1">תשלום התקבל</div>
+        <div class="t2">${fmtDate(r.date)}${r.note?' · '+esc(r.note):''}</div></div>
+      <div class="amt plus">+${money(r.amount)} ₪</div>
+      <button class="del" onclick="delPay('${r.id}')">${trash}</button></div>`;
     return `<div class="tx workshop">
       <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg></div>
-      <div class="body"><div class="t1">סדנה בוצעה</div><div class="t2">${meta}</div></div>
-      <div class="amt minus">−${money(price)} ₪</div>
-      <button class="del" onclick="delTx('${t.id}')" aria-label="מחק">${trash}</button>
-    </div>`;
-  }).join('');
+      <div class="body"><div class="t1">${esc(r.type||'סדנה')}</div>
+        <div class="t2">${fmtDate(r.date)} · סיום ${r.time||'21:00'}${r.note?' · '+esc(r.note):''}</div></div>
+      <div class="amt minus">−${money(S.cfg.price)} ₪</div>
+      <button class="del" onclick="delWs('${r.id}')">${trash}</button></div>`;
+  }).join('') : `<div class="empty">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18M8 2v4M16 2v4"/></svg>
+      <p>אין תנועות להצגה</p></div>`;
 }
+window.renderHist = renderHist;
 
-/* ===================== RENDER: REPORTS ===================== */
+/* ========================= RENDER: REPORTS ========================= */
 const charts={};
 function renderReports(){
-  const price=STATE.price, months={};
-  STATE.transactions.forEach(t=>{
-    const k=monthKey(t.date);
-    if(!months[k]) months[k]={pay:0,ws:0};
-    if(t.type==='payment') months[k].pay+=t.amount; else months[k].ws+=1;
-  });
-  const keys=Object.keys(months).sort();
-  const labels=keys.map(monthLabel);
-  const payData=keys.map(k=>months[k].pay);
-  const wsData =keys.map(k=>months[k].ws);
-  let running=0;
-  const balData=keys.map(k=>{running+=months[k].pay-months[k].ws*price;return running;});
+  const price=S.cfg.price, M={};
+  S.payments.forEach(p=>{ (M[monthKey(p.date)] ||= {pay:0,ws:0}).pay += p.amount; });
+  S.workshops.filter(w=>w.status==='done').forEach(w=>{ (M[monthKey(w.date)] ||= {pay:0,ws:0}).ws += 1; });
+  const keys=Object.keys(M).sort(), labels=keys.map(monthLabel);
+  let run=0;
+  const bal=keys.map(k=>{run+=M[k].pay-M[k].ws*price;return run});
 
-  const gridC='#2a3546', tickC='#9aa8bd';
-  const opts=fmt=>({
-    responsive:true,maintainAspectRatio:false,
+  const tick='#9aa8bd', grid='#2a3546';
+  const O=fmt=>({responsive:true,maintainAspectRatio:false,
     plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>fmt(c.parsed.y)}}},
-    scales:{
-      x:{grid:{display:false},ticks:{color:tickC,font:{size:11,family:'Heebo'}}},
-      y:{grid:{color:gridC},ticks:{color:tickC,font:{size:11,family:'Heebo'},callback:fmt},beginAtZero:true}
-    }
-  });
-  draw('chartPay','bar',labels,payData,'#5b8def',opts(v=>money(v)+' ₪'));
-  draw('chartWs','bar',labels,wsData,'#3fb950',opts(v=>v));
-  const bo=opts(v=>money(v)+' ₪'); bo.scales.y.beginAtZero=false;
-  draw('chartBal','line',labels,balData,'#e3a008',bo);
+    scales:{x:{grid:{display:false},ticks:{color:tick,font:{size:11,family:'Heebo'}}},
+      y:{grid:{color:grid},ticks:{color:tick,font:{size:11,family:'Heebo'},callback:fmt},beginAtZero:true}}});
+  draw('cPay','bar',labels,keys.map(k=>M[k].pay),'#5b8def',O(v=>money(v)+' ₪'));
+  draw('cWs','bar',labels,keys.map(k=>M[k].ws),'#3fb950',O(v=>v));
+  const bo=O(v=>money(v)+' ₪'); bo.scales.y.beginAtZero=false;
+  draw('cBal','line',labels,bal,'#e3a008',bo);
 }
 function draw(id,type,labels,data,color,options){
   const ctx=document.getElementById(id);
   if(charts[id]){charts[id].destroy();delete charts[id];}
   if(!labels.length){ctx.getContext('2d').clearRect(0,0,ctx.width,ctx.height);return;}
-  charts[id]=new Chart(ctx,{type,data:{labels,datasets:[{
-    data,borderColor:color,
-    backgroundColor:type==='line'?'rgba(227,160,8,.1)':color,
-    borderRadius:type==='bar'?7:0,borderWidth:type==='line'?2.5:0,
-    tension:.35,fill:type==='line',pointBackgroundColor:color,
-    pointRadius:4,pointHoverRadius:6,maxBarThickness:38
-  }]},options});
+  charts[id]=new Chart(ctx,{type,data:{labels,datasets:[{data,borderColor:color,
+    backgroundColor:type==='line'?'rgba(227,160,8,.1)':color,borderRadius:type==='bar'?7:0,
+    borderWidth:type==='line'?2.5:0,tension:.35,fill:type==='line',
+    pointBackgroundColor:color,pointRadius:4,pointHoverRadius:6,maxBarThickness:40}]},options});
 }
 
-/* ===================== SHEET ===================== */
-window.openSheet = kind=>{
-  const sheet=document.getElementById('sheet');
-  if(kind==='workshop'){
-    sheet.innerHTML=`
-      <div class="handle"></div>
-      <h2>נוספה סדנה</h2>
-      <div class="field"><label>תאריך</label><input type="date" id="wsDate" value="${todayISO()}"></div>
-      <div class="field"><label>הערה (רשות)</label><input type="text" id="wsNote" placeholder="למשל: סדנת בית ספר"></div>
-      <button class="submit" id="wsSubmit">אישור סדנה</button>`;
-    document.getElementById('wsSubmit').onclick=addWorkshop;
-  }else{
-    sheet.innerHTML=`
-      <div class="handle"></div>
-      <h2>הוספת תשלום</h2>
-      <div class="field"><label>סכום (₪)</label>
-        <input type="number" id="payAmt" inputmode="numeric" placeholder="600">
-        <div class="quick-amt">
-          <button data-a="100">100</button><button data-a="300">300</button>
-          <button data-a="600">600</button><button data-a="1000">1,000</button>
-        </div>
-      </div>
-      <div class="field"><label>תאריך</label><input type="date" id="payDate" value="${todayISO()}"></div>
-      <div class="field"><label>הערה (רשות)</label><input type="text" id="payNote" placeholder="למשל: מזומן"></div>
-      <button class="submit" id="paySubmit">שמירת תשלום</button>`;
-    sheet.querySelectorAll('.quick-amt button').forEach(b=>{
-      b.onclick=()=>document.getElementById('payAmt').value=b.dataset.a;
-    });
-    document.getElementById('paySubmit').onclick=addPayment;
-  }
-  document.getElementById('sheetBg').classList.add('open');
-};
-window.closeSheet = ()=>document.getElementById('sheetBg').classList.remove('open');
-
-/* ===================== WRITES ===================== */
-function newId(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7);}
-
-async function addWorkshop(){
-  const item={id:newId(),type:'workshop',amount:0,
-    date:document.getElementById('wsDate').value||todayISO(),
-    note:document.getElementById('wsNote').value.trim()};
-  closeSheet();
-  try{ await setDoc(doc(txCol,item.id),item); toast('סדנה נוספה'); }
-  catch(e){ console.error(e); toast('השמירה נכשלה',true); }
+/* ========================= SETTINGS ========================= */
+function renderSettings(){
+  document.getElementById('priceIn').value   = S.cfg.price;
+  document.getElementById('defTimeIn').value = S.cfg.defaultTime;
+  document.getElementById('setCount').textContent = S.workshops.length + S.payments.length;
+  document.getElementById('typeMgr').innerHTML = (S.cfg.types||[]).map((t,i)=>
+    `<span class="type-tag">${esc(t)}<button onclick="delType(${i})" aria-label="הסר">×</button></span>`).join('')
+    || '<span style="color:var(--text-3);font-size:13px">אין סוגים מוגדרים</span>';
 }
-async function addPayment(){
-  const amt=parseFloat(document.getElementById('payAmt').value);
-  if(!amt||amt<=0){ toast('יש להזין סכום תקין',true); return; }
-  const item={id:newId(),type:'payment',amount:amt,
-    date:document.getElementById('payDate').value||todayISO(),
-    note:document.getElementById('payNote').value.trim()};
-  closeSheet();
-  try{ await setDoc(doc(txCol,item.id),item); toast('תשלום נשמר'); }
-  catch(e){ console.error(e); toast('השמירה נכשלה',true); }
+async function saveCfg(patch){
+  try{ await setDoc(cfgDoc,{...S.cfg,...patch},{merge:true}); }
+  catch(e){ console.error(e); toast('העדכון נכשל',true); }
 }
-window.delTx = async id=>{
-  try{ await deleteDoc(doc(txCol,id)); toast('נמחק'); }
-  catch(e){ console.error(e); toast('המחיקה נכשלה',true); }
-};
-window.updatePrice = async v=>{
+window.setPrice = v=>{
   const p=parseFloat(v);
-  if(!p||p<=0){ document.getElementById('priceInput').value=STATE.price; toast('מחיר לא תקין',true); return; }
-  try{ await setDoc(settingsDoc,{price:p}); toast('המחיר עודכן'); }
+  if(!p||p<=0){ document.getElementById('priceIn').value=S.cfg.price; return toast('מחיר לא תקין',true); }
+  saveCfg({price:p}); toast('המחיר עודכן');
+};
+window.setDefTime = v=>{ if(v){ saveCfg({defaultTime:v}); toast('שעת ברירת המחדל עודכנה'); } };
+window.addType = ()=>{
+  const el=document.getElementById('newType'), v=el.value.trim();
+  if(!v) return;
+  if((S.cfg.types||[]).includes(v)) return toast('הסוג כבר קיים',true);
+  saveCfg({types:[...(S.cfg.types||[]),v]}); el.value=''; toast('הסוג נוסף');
+};
+window.delType = i=>{
+  const t=[...(S.cfg.types||[])]; t.splice(i,1);
+  saveCfg({types:t}); toast('הסוג הוסר');
+};
+
+/* ========================= SHEETS ========================= */
+const sheetBg=document.getElementById('sheetBg'), sheetEl=document.getElementById('sheet');
+window.closeSheet = ()=>sheetBg.classList.remove('open');
+
+window.openWs = (dateISO)=>{
+  const d = dateISO || selDay || todayISO();
+  const types = S.cfg.types||[];
+  sheetEl.innerHTML = `
+    <div class="handle"></div>
+    <h2>קביעת סדנה</h2>
+    <div class="h-sub">הכסף יירד רק לאחר אישור סיום הסדנה</div>
+    <div class="field"><label>סוג הסדנה</label>
+      <input type="text" id="wType" placeholder="למשל: סדנת בישול" value="${esc(types[0]||'')}">
+      <div class="pill-row" id="typePills">
+        ${types.map(t=>`<button data-t="${esc(t)}">${esc(t)}</button>`).join('')}
+      </div>
+    </div>
+    <div class="field"><div class="row">
+      <div><label>תאריך</label><input type="date" id="wDate" value="${d}"></div>
+      <div><label>שעת סיום</label><input type="time" id="wTime" value="${S.cfg.defaultTime}"></div>
+    </div></div>
+    <div class="field"><label>הערה (רשות)</label><input type="text" id="wNote" placeholder="מיקום, מספר משתתפים…"></div>
+    <button class="submit" id="wSave">קביעת הסדנה</button>`;
+  sheetEl.querySelectorAll('#typePills button').forEach(b=>b.onclick=()=>{
+    document.getElementById('wType').value=b.dataset.t;
+    sheetEl.querySelectorAll('#typePills button').forEach(x=>x.classList.remove('sel'));
+    b.classList.add('sel');
+  });
+  document.getElementById('wSave').onclick=saveWs;
+  sheetBg.classList.add('open');
+};
+window.openPay = ()=>{
+  sheetEl.innerHTML = `
+    <div class="handle"></div>
+    <h2>הוספת תשלום</h2>
+    <div class="h-sub">סכום שקיבלת מאבא</div>
+    <div class="field"><label>סכום (₪)</label>
+      <input type="number" id="pAmt" inputmode="numeric" placeholder="600">
+      <div class="pill-row">
+        ${[100,300,600,1000].map(v=>`<button data-a="${v}">${nf.format(v)}</button>`).join('')}
+      </div>
+    </div>
+    <div class="field"><label>תאריך</label><input type="date" id="pDate" value="${todayISO()}"></div>
+    <div class="field"><label>הערה (רשות)</label><input type="text" id="pNote" placeholder="מזומן / העברה"></div>
+    <button class="submit" id="pSave">שמירת תשלום</button>`;
+  sheetEl.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>document.getElementById('pAmt').value=b.dataset.a);
+  document.getElementById('pSave').onclick=savePay;
+  sheetBg.classList.add('open');
+};
+
+/* ========================= WRITES ========================= */
+async function saveWs(){
+  const type=document.getElementById('wType').value.trim()||'סדנה';
+  const date=document.getElementById('wDate').value||todayISO();
+  const time=document.getElementById('wTime').value||S.cfg.defaultTime;
+  const note=document.getElementById('wNote').value.trim();
+  const item={id:newId(),type,date,time,note,status:'planned',created:Date.now()};
+  closeSheet();
+  try{ await setDoc(doc(wsCol,item.id),item); toast('הסדנה נקבעה'); }
+  catch(e){ console.error(e); toast('השמירה נכשלה',true); }
+}
+async function savePay(){
+  const amt=parseFloat(document.getElementById('pAmt').value);
+  if(!amt||amt<=0) return toast('יש להזין סכום תקין',true);
+  const item={id:newId(),amount:amt,
+    date:document.getElementById('pDate').value||todayISO(),
+    note:document.getElementById('pNote').value.trim(),created:Date.now()};
+  closeSheet();
+  try{ await setDoc(doc(payCol,item.id),item); toast('תשלום נשמר'); }
+  catch(e){ console.error(e); toast('השמירה נכשלה',true); }
+}
+window.markDone = async id=>{
+  try{ await updateDoc(doc(wsCol,id),{status:'done',doneAt:Date.now()});
+       toast(`הסדנה אושרה · ${money(S.cfg.price)} ₪ ירדו מהיתרה`); }
   catch(e){ console.error(e); toast('העדכון נכשל',true); }
 };
+window.markCancel = async id=>{
+  try{ await updateDoc(doc(wsCol,id),{status:'cancel'}); toast('הסדנה סומנה כבוטלה'); }
+  catch(e){ console.error(e); toast('העדכון נכשל',true); }
+};
+window.reopen = async id=>{
+  try{ await updateDoc(doc(wsCol,id),{status:'planned'}); toast('הוחזר למתוכננת'); }
+  catch(e){ console.error(e); toast('העדכון נכשל',true); }
+};
+window.delWs = async id=>{
+  if(!confirm('למחוק את הסדנה?'))return;
+  try{ await deleteDoc(doc(wsCol,id)); toast('נמחק'); }
+  catch(e){ console.error(e); toast('המחיקה נכשלה',true); }
+};
+window.delPay = async id=>{
+  if(!confirm('למחוק את התשלום?'))return;
+  try{ await deleteDoc(doc(payCol,id)); toast('נמחק'); }
+  catch(e){ console.error(e); toast('המחיקה נכשלה',true); }
+};
 window.clearAll = async ()=>{
-  if(!confirm('למחוק את כל התשלומים והסדנאות? הפעולה תשפיע על כל המכשירים ואינה הפיכה.'))return;
+  if(!confirm('למחוק את כל הסדנאות והתשלומים? הפעולה משפיעה על כל המכשירים ואינה הפיכה.'))return;
   try{
-    const snap=await getDocs(txCol);
-    const batch=writeBatch(db);
-    snap.forEach(d=>batch.delete(d.ref));
-    await batch.commit();
-    toast('כל הנתונים נמחקו');
+    const b=writeBatch(db);
+    (await getDocs(wsCol)).forEach(d=>b.delete(d.ref));
+    (await getDocs(payCol)).forEach(d=>b.delete(d.ref));
+    await b.commit(); toast('כל הנתונים נמחקו');
   }catch(e){ console.error(e); toast('המחיקה נכשלה',true); }
 };
 window.exportData = ()=>{
-  const data={exported:new Date().toISOString(),price:STATE.price,transactions:STATE.transactions};
+  const data={exported:new Date().toISOString(),config:S.cfg,workshops:S.workshops,payments:S.payments};
   const url=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));
-  const a=document.createElement('a');
-  a.href=url; a.download='workshops-backup-'+todayISO()+'.json'; a.click();
-  URL.revokeObjectURL(url);
-  toast('קובץ הגיבוי ירד');
+  const a=document.createElement('a'); a.href=url; a.download='workshops-'+todayISO()+'.json'; a.click();
+  URL.revokeObjectURL(url); toast('הגיבוי ירד');
 };
 
-/* ===================== NAV ===================== */
-window.nav = (v,btn)=>{
-  document.querySelectorAll('.view').forEach(el=>el.classList.add('hidden'));
-  document.getElementById('view-'+v).classList.remove('hidden');
-  document.querySelectorAll('#nav button').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  if(v==='reports')  renderReports();
-  if(v==='history')  renderHistory();
-  if(v==='settings') renderSettings();
-  window.scrollTo({top:0,behavior:'smooth'});
-};
-function renderSettings(){
-  document.getElementById('priceInput').value=STATE.price;
-  document.getElementById('setCount').textContent=STATE.transactions.length;
-}
-function refreshAll(){
-  renderHome();
-  const vis=id=>!document.getElementById(id).classList.contains('hidden');
-  if(vis('view-history'))  renderHistory();
-  if(vis('view-reports'))  renderReports();
-  if(vis('view-settings')) renderSettings();
-}
-window.renderHistory = renderHistory;
-
-/* ===================== TOAST ===================== */
-let toastT;
+/* ========================= TOAST / SYNC ========================= */
+let tT;
 function toast(msg,err){
   const t=document.getElementById('toast');
   t.className='toast'+(err?' err':'');
-  t.innerHTML=(err
-    ?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>'
+  t.innerHTML=(err?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>'
     :'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m5 12 5 5L20 7"/></svg>')+msg;
-  t.classList.add('show');
-  clearTimeout(toastT);
-  toastT=setTimeout(()=>t.classList.remove('show'),2000);
+  t.classList.add('show'); clearTimeout(tT); tT=setTimeout(()=>t.classList.remove('show'),2400);
+}
+function sync(on){ ['dotD','dotM'].forEach(id=>document.getElementById(id).className='dot '+(on?'on':'off')); }
+function hideLoader(){ if(S.ready>=1) document.getElementById('loader').classList.add('gone'); }
+function refresh(){
+  renderHome();
+  if(page==='cal')  renderCal();
+  if(page==='hist') renderHist();
+  if(page==='rep')  renderReports();
+  if(page==='set')  renderSettings();
 }
 
-function setSync(on){
-  const dot=document.getElementById('syncDot');
-  dot.className='dot '+(on?'on':'off');
-}
-function hideLoader(){
-  if(STATE.ready)return;
-  STATE.ready=true;
-  document.getElementById('loader').classList.add('gone');
-}
+/* ========================= INIT ========================= */
+buildNav(); initCal(); go('home');
 
-/* ===================== REALTIME LISTENERS ===================== */
-onSnapshot(txCol, snap=>{
-  STATE.transactions = snap.docs.map(d=>d.data());
-  setSync(true); hideLoader(); refreshAll();
-}, err=>{
-  console.error(err); setSync(false); hideLoader();
-  toast('אין חיבור לשרת',true);
-});
+onSnapshot(wsCol, s=>{ S.workshops=s.docs.map(d=>d.data()); S.ready++; sync(true); hideLoader(); refresh(); },
+  e=>{ console.error(e); sync(false); document.getElementById('loader').classList.add('gone'); toast('אין חיבור לשרת',true); });
 
-onSnapshot(settingsDoc, snap=>{
-  STATE.price = snap.exists() ? (snap.data().price||100) : 100;
-  if(!snap.exists()) setDoc(settingsDoc,{price:100}).catch(()=>{});
-  refreshAll();
-}, err=>console.error(err));
+onSnapshot(payCol, s=>{ S.payments=s.docs.map(d=>d.data()); S.ready++; sync(true); hideLoader(); refresh(); },
+  e=>console.error(e));
 
-setTimeout(hideLoader,6000);
+onSnapshot(cfgDoc, s=>{
+  S.cfg = s.exists() ? {...DEFAULTS,...s.data()} : {...DEFAULTS};
+  if(!s.exists()) setDoc(cfgDoc,DEFAULTS).catch(()=>{});
+  refresh();
+}, e=>console.error(e));
+
+/* re-evaluate locked buttons every 30s so they unlock at the right time */
+setInterval(()=>{ if(S.workshops.some(w=>w.status==='planned')) refresh(); },30000);
+setTimeout(()=>document.getElementById('loader').classList.add('gone'),6000);
 </script>
 </body>
 </html>
